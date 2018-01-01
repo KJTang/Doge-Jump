@@ -3,8 +3,12 @@ import EventManager from './event_manager'
 
 import Logger       from '../base/logger'
 import Vector2      from '../base/vector'
+import Rect         from '../base/rect'
 
 export default class InputManager extends Manager {
+    selectables = [];
+    curSelecting = [];
+
     constructor() {
         super();
         canvas.addEventListener('touchstart', this.onTouchStart.bind(this));
@@ -27,6 +31,7 @@ export default class InputManager extends Manager {
         let pos = Vector2.transPos(new Vector2(this.curTouchX, this.curTouchY));
         this.isTouching = true;
 
+        this.handleSelectDown();
         // Logger.print("touch start: " + pos.toString());
         EventManager.instance.dispatch("TouchStart", pos);
     }
@@ -42,6 +47,7 @@ export default class InputManager extends Manager {
         let pos = Vector2.transPos(new Vector2(this.curTouchX, this.curTouchY));
         this.isTouching = false;
 
+        this.handleSelectUp();
         // Logger.print("touch end: " + pos.toString());
         EventManager.instance.dispatch("TouchEnd", pos);
     }
@@ -49,5 +55,41 @@ export default class InputManager extends Manager {
     onTouchCancel(e) {
         e.preventDefault();
         this.isTouching = false;
+    }
+
+    addSelectable(select) {
+        this.selectables.push(select);
+    }
+
+    removeSelectable(select) {
+        for (var i = 0; i != this.selectables.length; ++i) {
+            if (this.selectables[i] == select) {
+                this.selectables.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    handleSelectDown() {
+        let point = Vector2.transPos(new Vector2(this.curTouchX, this.curTouchY));
+        this.curSelecting = [];
+        this.selectables.forEach(function(select) {
+            // Logger.print("handleSelectDown: " + select.rect);
+            if (Rect.isOverlapPoint(select.rect, point)) {
+                InputManager.instance.curSelecting.push(select);
+                select.onSelectDown(point);
+            }
+        });
+    }
+
+    handleSelectUp() {
+        let point = Vector2.transPos(new Vector2(this.curTouchX, this.curTouchY));
+        this.curSelecting.forEach(function(select) {
+            // Logger.print("handleSelectUp: " + select.rect);
+            select.onSelectUp(point);
+            if (Rect.isOverlapPoint(select.rect, point)) {
+                select.onSelect(point);
+            }
+        });
     }
 }

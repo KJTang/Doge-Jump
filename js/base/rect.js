@@ -1,3 +1,5 @@
+import Logger   from './logger'
+
 export default class Rect {
     constructor(x = 0, y = 0, width = 0, height = 0) {
         this.x = x;

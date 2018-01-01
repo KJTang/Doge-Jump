@@ -5,6 +5,7 @@ import EventManager     from '../manager/event_manager'
 import Logger           from '../base/logger'
 import Scene            from '../base/scene'
 import Sprite           from '../base/sprite'
+import Selectable       from '../base/selectable'
 import Vector2          from '../base/vector'
 
 import Player           from '../runtime/player'
@@ -18,11 +19,14 @@ export default class MainScene extends Scene {
         this.player = new Player();
         this.player.addChild(new Sprite('images/hero.png', 80, 80, 0, 100));
         this.addChild(this.player);
+
+        let select = new Selectable(0, 0, 100, 100);
+        this.addChild(select);
     }
 
     onSwitchIn() {
         ActionManager.instance.addAction(new ActionCallFunc(function() {
-            SceneManager.instance.switchToScene(new PlayScene());
+            // SceneManager.instance.switchToScene(new PlayScene());
             EventManager.instance.dispatch("abc", 123);
         }, 3));
 

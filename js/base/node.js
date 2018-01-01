@@ -1,9 +1,11 @@
-import Vector2 from 'vector'
-import Logger from 'logger'
+import Vector2  from './vector'
+import Rect     from './rect'
+import Logger   from './logger'
 
 export default class Node {
     _position = new Vector2(0, 0);
     _worldPosition = new Vector2(0, 0);
+    _rect = new Rect(0, 0, 0, 0);
     isWorldPosDirty = true;
 
     _enable = false;
@@ -100,6 +102,18 @@ export default class Node {
         return this._worldPosition;
     }
 
+    get rect() {
+        if (!this.isWorldPosDirty) {
+            return this._rect;
+        }
+
+        this._rect.x      = this.worldPosition.x;
+        this._rect.y      = this.worldPosition.y;
+        this._rect.width  = this.width;
+        this._rect.height = this.height;
+        return this._rect;
+    }
+
     addChild(node) {
         node.setParent(this);
         this.children.push(node);
@@ -121,6 +135,29 @@ export default class Node {
             this.isWorldPosDirty = true;
         } else {
             this.worldPosition.position = Vector2.sub(this.worldPosition, parent.worldPosition);
+        }
+    }
+
+    // pos at entire scene
+    static getLevel(node) {
+        let level = 0;
+        let parent = node.parent;
+        while (parent) {
+            parent = parent.parent;
+            level += 1;
+        }
+        return level;
+    }
+
+    // pos at cur parent
+    static getIndex(node) {
+        if (!node.parent) {
+            return 0;
+        }
+        for (var i = 0; i != node.parent.children.length; ++i) {
+            if (node.parent.children[i] == node) {
+                return i;
+            }
         }
     }
 
