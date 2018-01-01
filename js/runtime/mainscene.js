@@ -34,6 +34,6 @@ export default class MainScene extends Scene {
     }
 
     onSceneChanged(data) {
-        Logger.print("event_manager: " + data);
+        // Logger.print("event_manager: " + data);
     }
 }

@@ -39,7 +39,6 @@ export default class EventManager extends Manager {
     dispatch(evt, data = null) {
         let list = this.events[evt];
         if (list != null) {
-            Logger.print("EventManager: " + list.length);
             list.forEach(function(listener) {
                 listener(data);
             });
