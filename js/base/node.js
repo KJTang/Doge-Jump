@@ -6,7 +6,7 @@ export default class Node {
     _worldPosition = new Vector2(0, 0);
     isWorldPosDirty = true;
 
-    _enable = true;
+    _enable = false;
     _visible = true;
 
     parent = null;
@@ -14,8 +14,10 @@ export default class Node {
 
     constructor(x = 0, y = 0, width = 0, height = 0) {
         this.position = new Vector2(x, y);
-        this.width  = width
-        this.height = height
+        this.width  = width;
+        this.height = height;
+
+        this.enable = true;
     }
 
     update(dt) {
@@ -38,9 +40,13 @@ export default class Node {
         });
     }
 
-    onEnable() {}
+    onEnable() {
+        // Logger.print("onEnable");
+    }
     
-    onDisable() {}
+    onDisable() {
+        // Logger.print("onDisable");
+    }
 
     set enable(value) {
         if (this._enable != value) {
@@ -100,7 +106,12 @@ export default class Node {
     }
 
     removeChild(node) {
-        this.children.pop(node);
+        for (var i = 0; i != this.children.length; ++i) {
+            if (this.children[i] == node) {
+                this.children.splice(i, 1);
+                break;
+            }
+        }
     }
 
     setParent(parent, changeWorldPos = true) {
@@ -110,6 +121,16 @@ export default class Node {
             this.isWorldPosDirty = true;
         } else {
             this.worldPosition.position = Vector2.sub(this.worldPosition, parent.worldPosition);
+        }
+    }
+
+    static destory(node) {
+        node.enable = false;
+        node.children.forEach(function(child) {
+            Node.destory(child);
+        });
+        if (node.parent) {
+            node.parent.removeChild(node);
         }
     }
 }

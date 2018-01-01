@@ -1,5 +1,6 @@
-import Manager from './manager'
-import Logger from '../base/logger'
+import Manager  from './manager'
+import Logger   from '../base/logger'
+import Node     from '../base/node'
 
 export default class SceneManager extends Manager {
     constructor() {
@@ -63,6 +64,7 @@ export default class SceneManager extends Manager {
     realSwitchToScene() {
         if (this.curScene != null) {
             this.curScene.onSwitchOut();
+            Node.destory(this.curScene);
         }
         this.curScene = this.nextScene;
         this.nextScene = null;
