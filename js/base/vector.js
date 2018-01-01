@@ -33,4 +33,8 @@ export default class Vector2 {
     static sqrDistance(a, b) {
         return Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2);
     }
+
+    static transPos(pos) {
+        return new Vector2(pos.x, window.innerHeight - pos.y);
+    }
 }

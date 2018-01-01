@@ -9,6 +9,7 @@ import SceneManager     from './manager/scene_manager'
 import ActionManager    from './manager/action_manager'
 import EventManager     from './manager/event_manager'
 import MusicManager     from './manager/music_manager'
+import InputManager     from './manager/input_manager'
 
 import Logger       from './base/logger'
 import Node         from './base/node'
@@ -47,6 +48,7 @@ export default class Main {
         this.managers.push(ActionManager.instance);
         this.managers.push(EventManager.instance);
         this.managers.push(MusicManager.instance);
+        this.managers.push(InputManager.instance);
 
         this.managers.forEach(function(mgr) {
             mgr.restart();
