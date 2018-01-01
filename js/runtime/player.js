@@ -1,4 +1,4 @@
-// import Bullet   from './bullet'
+// import Bullet   from '../player/bullet'
 // import DataBus  from '../databus'
 
 import Vector2  from '../base/vector'

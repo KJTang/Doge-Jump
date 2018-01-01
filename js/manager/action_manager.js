@@ -13,6 +13,10 @@ export default class ActionManager extends Manager {
         return this._instance;
     }
 
+    restart() {
+        this.actions = [];
+    }
+
     update(dt) {
         for (var i = 0; i < this.actions.length; i++) {
             let act = this.actions[i];

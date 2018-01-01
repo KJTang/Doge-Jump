@@ -1,6 +1,7 @@
 import SceneManager     from '../manager/scene_manager'
 import ActionManager    from '../manager/action_manager'
 import ActionCallFunc   from '../manager/action/action_callfunc'
+import EventManager     from '../manager/event_manager'
 import Logger           from '../base/logger'
 import Scene            from '../base/scene'
 import Sprite           from '../base/sprite'
@@ -14,15 +15,25 @@ export default class MainScene extends Scene {
     constructor() {
         super();
 
-        // this.bg = new Background();
-        // this.addChild(this.bg);
-
         this.player = new Player();
         this.player.addChild(new Sprite('images/hero.png', 80, 80, 0, 100));
         this.addChild(this.player);
+    }
 
+    onSwitchIn() {
         ActionManager.instance.addAction(new ActionCallFunc(function() {
             SceneManager.instance.switchToScene(new PlayScene());
+            EventManager.instance.dispatch("abc", 123);
         }, 3));
+
+        EventManager.instance.addEventListener("abc", this.onSceneChanged);
+    }
+
+    onSwitchOut() {
+        EventManager.instance.removeEventListener("abc", this.onSceneChanged);
+    }
+
+    onSceneChanged(data) {
+        Logger.print("event_manager: " + data);
     }
 }

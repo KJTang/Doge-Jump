@@ -5,8 +5,9 @@ import GameInfo     from './runtime/gameinfo'
 import Music        from './runtime/music'
 import DataBus      from './databus'
 
-import SceneManager from './manager/scene_manager'
+import SceneManager     from './manager/scene_manager'
 import ActionManager    from './manager/action_manager'
+import EventManager     from './manager/event_manager'
 
 import Logger       from './base/logger'
 import Node         from './base/node'
@@ -40,8 +41,10 @@ export default class Main {
         // this.gameinfo = new GameInfo()
         // this.music    = new Music()
 
+        this.managers = [];
         this.managers.push(SceneManager.instance);
         this.managers.push(ActionManager.instance);
+        this.managers.push(EventManager.instance);
 
         this.managers.forEach(function(mgr) {
             mgr.restart();
@@ -177,6 +180,7 @@ export default class Main {
         // }
 
         if (SceneManager.instance.quitGame) {
+            this.restart();
             return;
         }
         window.requestAnimationFrame(this.loop.bind(this), canvas);

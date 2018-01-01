@@ -6,8 +6,8 @@ export default class Node {
     _worldPosition = new Vector2(0, 0);
     isWorldPosDirty = true;
 
-    enable = true;
-    visible = true;
+    _enable = true;
+    _visible = true;
 
     parent = null;
     children = [];
@@ -42,15 +42,27 @@ export default class Node {
     
     onDisable() {}
 
-    setEnable(bEnable) {
-        if (this.enable != bEnable) {
-            this.enable = bEnable;
-            if (bEnable) {
+    set enable(value) {
+        if (this._enable != value) {
+            this._enable = value;
+            if (value) {
                 this.onEnable();
             } else {
                 this.onDisable();
             }
         }
+    }
+
+    get enable() {
+        return this._enable;
+    }
+
+    set visible(value) {
+        this._visible = value;
+    }
+
+    get visible() {
+        return this._visible;
     }
 
     set position(value) {
@@ -72,13 +84,6 @@ export default class Node {
         if (!this.isWorldPosDirty) {
             return this._worldPosition;
         }
-
-        // let parent = this.parent;
-        // this._worldPosition = new Vector2(0, 0);
-        // while (parent != null) {
-        //     this._worldPosition.add(parent.position);
-        //     parent = parent.parent;
-        // }
 
         this._worldPosition = this.position;
         if (this.parent != null) {

@@ -31,6 +31,10 @@ export default class SceneManager extends Manager {
         return this._instance;
     }
 
+    restart() {
+        this.quitGame = false;
+    }
+
     update(dt) {
         if (this.curScene) {
             this.curScene.update(dt);
