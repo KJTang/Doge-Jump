@@ -8,7 +8,7 @@ export default class Selectable extends Node {
     }
 
     onEnable() {
-        // Logger.print("Selectable onEnable");
+        // Logger.print("Selectable onEnable: " + this.rect.toString());
         InputManager.instance.addSelectable(this);
     }
 

@@ -25,8 +25,8 @@ export default class Sprite extends Node {
             0,
             this.width,
             this.height,
-            this.worldPosition.x,
-            window.innerHeight - this.worldPosition.y,
+            this.worldPosition.x - this.width * this.pivot.x,
+            window.innerHeight - this.worldPosition.y - this.height * (1 - this.pivot.y),
             this.width,
             this.height
         );

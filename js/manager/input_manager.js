@@ -83,13 +83,48 @@ export default class InputManager extends Manager {
     }
 
     handleSelectUp() {
+        // let point = Vector2.transPos(new Vector2(this.curTouchX, this.curTouchY));
+        // this.curSelecting.forEach(function(select) {
+        //     // Logger.print("handleSelectUp: " + select.rect);
+        //     select.onSelectUp(point);
+        //     if (Rect.isOverlapPoint(select.rect, point)) {
+        //         select.onSelect(point);
+        //     }
+        // });
+
         let point = Vector2.transPos(new Vector2(this.curTouchX, this.curTouchY));
-        this.curSelecting.forEach(function(select) {
-            // Logger.print("handleSelectUp: " + select.rect);
+        // on select up
+        for (let i = 0; i != this.curSelecting.length; ++i) {
+            let select = this.curSelecting[i];
             select.onSelectUp(point);
-            if (Rect.isOverlapPoint(select.rect, point)) {
-                select.onSelect(point);
+            if (!Rect.isOverlapPoint(select.rect, point)) {
+                this.curSelecting[i] = this.curSelecting[this.curSelecting.length - 1];
+                this.curSelecting.pop();
+                --i;
+            }
+        }
+
+        // sort
+        this.curSelecting.sort(function(a, b) {
+            if (Node.getLevel(a) < Node.getLevel(b)) {
+                return -1;
+            } else if (Node.getLevel(a) > Node.getLevel(b)) {
+                return 1;
+            } else if (Node.getIndex(a) < Node.getIndex(b)) {
+                return -1;
+            } else if (Node.getIndex(a) > Node.getIndex(b)) {
+                return 1;
+            } else {
+                return 0;
             }
         });
+
+        // on select
+        for (let i = 0; i != this.curSelecting.length; ++i) {
+            // if swallow event 
+            if (this.curSelecting[i].onSelect(point)) {
+                break;
+            }
+        }
     }
 }

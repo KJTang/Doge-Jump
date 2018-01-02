@@ -2,11 +2,13 @@ import SceneManager     from '../manager/scene_manager'
 import ActionManager    from '../manager/action_manager'
 import ActionCallFunc   from '../manager/action/action_callfunc'
 import EventManager     from '../manager/event_manager'
+
 import Logger           from '../base/logger'
+import Vector2          from '../base/vector'
 import Scene            from '../base/scene'
 import Sprite           from '../base/sprite'
 import Selectable       from '../base/selectable'
-import Vector2          from '../base/vector'
+import Button           from '../base/button'
 
 import Player           from '../runtime/player'
 import Background       from '../runtime/background'
@@ -16,12 +18,14 @@ export default class MainScene extends Scene {
     constructor() {
         super();
 
-        this.player = new Player();
-        this.player.addChild(new Sprite('images/hero.png', 80, 80, 0, 100));
-        this.addChild(this.player);
+        // this.player = new Player();
+        // this.player.addChild(new Sprite('images/hero.png', 80, 80, 0, 100));
+        // this.addChild(this.player);
 
-        let select = new Selectable(0, 0, 100, 100);
-        this.addChild(select);
+        let button = new Button(0, 0, 100, 100, function(point) {
+            Logger.print("button onSelect: " + point.toString());
+        });
+        this.addChild(button);
     }
 
     onSwitchIn() {
