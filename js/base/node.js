@@ -20,10 +20,10 @@ export default class Node {
     parent = null;
     children = [];
 
-    constructor(x = 0, y = 0, width = 0, height = 0) {
+    constructor(width = 0, height = 0, x = 0, y = 0) {
         this.position = new Vector2(x, y);
-        this.width  = width;
-        this.height = height;
+        this._rect.width  = width;
+        this._rect.height = height;
 
         this.enable = true;
     }
@@ -100,7 +100,7 @@ export default class Node {
         // set dirty
         this.setTransformDirty();
         this.children.forEach(function(child) {
-            this.setTransformDirty();
+            child.setTransformDirty();
         });
     }
 
@@ -135,10 +135,8 @@ export default class Node {
             return this._rect;
         }
 
-        this._rect.x      = this.worldPosition.x;
-        this._rect.y      = this.worldPosition.y;
-        this._rect.width  = this.width;
-        this._rect.height = this.height;
+        this._rect.x = this.worldPosition.x;
+        this._rect.y = this.worldPosition.y;
         this.isRectDirty = false;
         return this._rect;
     }
@@ -167,33 +165,33 @@ export default class Node {
         }
     }
 
-    // pos at entire scene
+    // order at entire scene
     static getLevel(node) {
-        if (!this.isLevelDirty) {
-            return this.level;
+        if (!node.isLevelDirty) {
+            return node.level;
         }
-        this.level = 0;
+        node.level = 0;
         let parent = node.parent;
         while (parent) {
             parent = parent.parent;
-            this.level += 1;
+            node.level += 1;
         }
-        this.isLevelDirty = false;
-        return this.level;
+        node.isLevelDirty = false;
+        return node.level;
     }
 
-    // pos at cur parent
+    // order at cur parent
     static getIndex(node) {
-        if (!this.isIndexDirty) {
-            return this.index;
+        if (!node.isIndexDirty) {
+            return node.index;
         }
-        this.isIndexDirty = false;
+        node.isIndexDirty = false;
         if (!node.parent) {
-            return this.index = 0;
+            return node.index = 0;
         }
         for (var i = 0; i != node.parent.children.length; ++i) {
             if (node.parent.children[i] == node) {
-                return this.index = i;
+                return node.index = i;
             }
         }
     }

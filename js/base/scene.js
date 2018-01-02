@@ -4,7 +4,7 @@ import Logger from 'logger'
 
 export default class Scene extends Node {
     constructor() {
-        super(0, 0, window.innerWidth, window.innerHeight);
+        super(window.innerWidth, window.innerHeight);
     }
 
     onSwitchIn() {}

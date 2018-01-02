@@ -3,8 +3,9 @@ import Node     from './node'
 import Logger   from './logger'
 
 export default class Selectable extends Node {
-    constructor(x = 0, y = 0, width = 0, height = 0) {
-        super(x, y, width, height);
+    constructor(width = 0, height = 0, swallowTouch = true) {
+        super(width, height, 0, 0);
+        this.swallowTouch = swallowTouch;
     }
 
     onEnable() {
