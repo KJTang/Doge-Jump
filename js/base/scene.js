@@ -4,7 +4,8 @@ import Logger from 'logger'
 
 export default class Scene extends Node {
     constructor() {
-        super(window.innerWidth, window.innerHeight);
+        super(window.innerWidth, window.innerHeight, 0, 0);
+        this.pivot = new Vector2(0, 0);
     }
 
     onSwitchIn() {}

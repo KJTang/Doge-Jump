@@ -5,6 +5,7 @@ import GameInfo     from './runtime/gameinfo'
 import Music        from './runtime/music'
 import DataBus      from './databus'
 
+import GameManager      from './manager/game_manager'
 import SceneManager     from './manager/scene_manager'
 import ActionManager    from './manager/action_manager'
 import EventManager     from './manager/event_manager'
@@ -44,6 +45,7 @@ export default class Main {
         // this.music    = new Music()
 
         this.managers = [];
+        this.managers.push(GameManager.instance);
         this.managers.push(SceneManager.instance);
         this.managers.push(ActionManager.instance);
         this.managers.push(EventManager.instance);
@@ -147,7 +149,7 @@ export default class Main {
     }
 
     render() {
-        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        ctx.clearRect(0, 0, GameManager.instance.screenWidth, GameManager.instance.screenHeight);
 
         SceneManager.instance.render(ctx);
     }

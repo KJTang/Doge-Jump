@@ -26,8 +26,8 @@ export default class Sprite extends Node {
     static renderImg(ctx, img, node) {
         ctx.drawImage(
             img,
-            node.rect.x - node.rect.width * node.pivot.x,
-            window.innerHeight - node.rect.y - node.rect.height * (1 - node.pivot.y),
+            node.rect.x,
+            window.innerHeight - node.rect.y - node.rect.height,
             node.rect.width,
             node.rect.height
         );

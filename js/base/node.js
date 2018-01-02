@@ -5,7 +5,8 @@ import Logger   from './logger'
 export default class Node {
     _position = new Vector2(0, 0);
     _worldPosition = new Vector2(0, 0);
-    _pivot = new Vector2(0, 0);
+    _pivot = new Vector2(0.5, 0.5);
+    // rect: x y: save pivot position, w h: size
     _rect = new Rect(0, 0, 0, 0);
 
     isWorldPosDirty = true;
@@ -113,7 +114,8 @@ export default class Node {
             return this._worldPosition;
         }
 
-        this._worldPosition = this.position;
+        this._worldPosition.x = this.position.x;
+        this._worldPosition.y = this.position.y;
         if (this.parent != null) {
             this._worldPosition.add(this.parent.worldPosition);
         }
@@ -124,6 +126,19 @@ export default class Node {
 
     set pivot(value) {
         this._pivot = value;
+        if (this._pivot.x > 1) {
+            this._pivot.x = 1;
+        }
+        if (this._pivot.x < 0) {
+            this._pivot.x = 0;
+        }
+        if (this._pivot.y > 1) {
+            this._pivot.y = 1;
+        }
+        if (this._pivot.y < 0) {
+            this._pivot.y = 0;
+        }
+        this.setTransformDirty();
     }
 
     get pivot() {
@@ -135,8 +150,8 @@ export default class Node {
             return this._rect;
         }
 
-        this._rect.x = this.worldPosition.x;
-        this._rect.y = this.worldPosition.y;
+        this._rect.x = this.worldPosition.x - this.pivot.x * this._rect.width;
+        this._rect.y = this.worldPosition.y - this.pivot.y * this._rect.height;
         this.isRectDirty = false;
         return this._rect;
     }
@@ -161,7 +176,7 @@ export default class Node {
         if (changeWorldPos) {
             this.setTransformDirty();
         } else {
-            this.worldPosition.position = Vector2.sub(this.worldPosition, parent.worldPosition);
+            this.position = Vector2.sub(this.worldPosition, parent.worldPosition);
         }
     }
 

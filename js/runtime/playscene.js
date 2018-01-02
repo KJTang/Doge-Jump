@@ -16,12 +16,11 @@ export default class PlayScene extends Scene {
 
         this.player = new Player();
         this.addChild(this.player);
-
     }
 
     onSwitchIn() {
         ActionManager.instance.addAction(new ActionCallFunc(function() {
             SceneManager.instance.quitGame = true;
-        }, 3));
+        }, 5));
     }
 }

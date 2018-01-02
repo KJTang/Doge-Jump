@@ -15,7 +15,7 @@ export default class Selectable extends Node {
 
     onDisable() {
         // Logger.print("Selectable onDisable");
-        InputManager.instance.removeSeleactable(this);
+        InputManager.instance.removeSelectable(this);
     }
 
     // ui event, when touch screen, current obj was touched, will call these

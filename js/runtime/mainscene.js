@@ -2,6 +2,7 @@ import SceneManager     from '../manager/scene_manager'
 import ActionManager    from '../manager/action_manager'
 import ActionCallFunc   from '../manager/action/action_callfunc'
 import EventManager     from '../manager/event_manager'
+import GameManager      from '../manager/game_manager'
 
 import Logger           from '../base/logger'
 import Vector2          from '../base/vector'
@@ -18,20 +19,23 @@ export default class MainScene extends Scene {
     constructor() {
         super();
 
-        // this.player = new Player();
-        // this.player.addChild(new Sprite('images/hero.png', 80, 80, 0, 100));
-        // this.addChild(this.player);
+        // let button = new Button('images/enemy.png', 'images/hero.png', 100, 100, function(point) {
+        //     Logger.print("button onSelect: " + point.toString());
+        // });
+        // this.addChild(button);
 
-        let button = new Button('images/enemy.png', 'images/hero.png', 100, 100, function(point) {
-            Logger.print("button onSelect: " + point.toString());
-        });
-        this.addChild(button);
+        // let button2 = new Button('images/enemy.png', 'images/hero.png', 100, 100, function(point) {
+        //     Logger.print("button2 onSelect: " + point.toString());
+        // });
+        // button2.position = new Vector2(50, 0);
+        // this.addChild(button2);
 
-        let button2 = new Button('images/enemy.png', 'images/hero.png', 100, 100, function(point) {
-            Logger.print("button2 onSelect: " + point.toString());
+        let startBtn = new Button('images/enemy.png', 'images/hero.png', 100, 100, function(point) {
+            SceneManager.instance.switchToScene(new PlayScene());
         });
-        button2.position = new Vector2(50, 0);
-        this.addChild(button2);
+        startBtn.position = new Vector2(100, 100);
+        startBtn.position = new Vector2(GameManager.instance.screenWidth / 2, GameManager.instance.screenHeight / 2);
+        this.addChild(startBtn);
     }
 
     onSwitchIn() {
