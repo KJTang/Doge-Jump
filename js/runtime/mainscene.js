@@ -22,7 +22,7 @@ export default class MainScene extends Scene {
         // this.player.addChild(new Sprite('images/hero.png', 80, 80, 0, 100));
         // this.addChild(this.player);
 
-        let button = new Button(0, 0, 100, 100, function(point) {
+        let button = new Button('images/enemy.png', 'images/hero.png', 0, 0, 100, 100, function(point) {
             Logger.print("button onSelect: " + point.toString());
         });
         this.addChild(button);

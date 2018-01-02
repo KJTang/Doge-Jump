@@ -15,6 +15,7 @@ export default class Node {
 
     _enable = false;
     _visible = true;
+    visibleBeforeDisable = true;
 
     parent = null;
     children = [];
@@ -66,8 +67,15 @@ export default class Node {
         if (this._enable != value) {
             this._enable = value;
             if (value) {
+                // visible if it's already visible before disable
+                this.visible = this.visibleBeforeDisable;
+
                 this.onEnable();
             } else {
+                // invisible when disabled
+                this.visibleBeforeDisable = this.visible;
+                this.visible = false;
+
                 this.onDisable();
             }
         }
