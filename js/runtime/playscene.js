@@ -20,7 +20,8 @@ export default class PlayScene extends Scene {
 
     onSwitchIn() {
         ActionManager.instance.addAction(new ActionCallFunc(function() {
-            SceneManager.instance.quitGame = true;
+            SceneManager.instance.switchToScene("MainScene");
+            // SceneManager.instance.quitGame = true;
         }, 5));
     }
 }

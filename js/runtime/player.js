@@ -15,7 +15,7 @@ const PLAYER_HEIGHT  = 20
 const PLAYER_JUMP_INTERVAL = 2;
 const PLAYER_JUMP_TIME = 1; 
 const PLAYER_JUMP_HEIGHT = 100;
-// acceleration
+// acceleration: a = 2h / t^2
 const PLAYER_JUMP_ACCE = - 2 * PLAYER_JUMP_HEIGHT / Math.pow(PLAYER_JUMP_TIME, 2);
 // init velocity: v = a * t
 const PLAYER_JUMP_VEL = - PLAYER_JUMP_ACCE * PLAYER_JUMP_TIME;

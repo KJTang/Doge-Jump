@@ -57,7 +57,13 @@ export default class Main {
         });
 
         // game entry
-        SceneManager.instance.switchToScene(new MainScene());
+        SceneManager.instance.addScene("MainScene", function() {
+            return new MainScene();
+        });
+        SceneManager.instance.addScene("PlayScene", function() {
+            return new PlayScene();
+        });
+        SceneManager.instance.switchToScene("MainScene");
 
         // game loop
         window.requestAnimationFrame(this.loop.bind(this), canvas);
@@ -136,7 +142,6 @@ export default class Main {
         // this.gameinfo.renderGameScore(ctx, databus.score)
     }
 
-    // 游戏逻辑更新主函数
     update(dt) {
         // this.collisionDetection()
 

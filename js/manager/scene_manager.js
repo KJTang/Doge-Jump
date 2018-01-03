@@ -33,6 +33,7 @@ export default class SceneManager extends Manager {
     }
 
     restart() {
+        this.sceneMap = new Object();
         this.quitGame = false;
     }
 
@@ -54,8 +55,17 @@ export default class SceneManager extends Manager {
         }
     }
 
-    switchToScene(scene) {
-        if (scene != null) {
+    addScene(name, func) {
+        if (!this.sceneMap) {
+            this.sceneMap = new Object();
+        }
+        this.sceneMap[name] = func;
+    }
+
+    switchToScene(name) {
+        let func = null;
+        let scene = null;
+        if (name != null && (func = this.sceneMap[name]) && (scene = func())) {
             this.nextScene = scene;
         }
     }

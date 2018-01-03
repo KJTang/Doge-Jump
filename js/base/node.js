@@ -1,3 +1,4 @@
+import GameManager      from '../manager/game_manager'
 import Vector2  from './vector'
 import Rect     from './rect'
 import Logger   from './logger'
@@ -154,6 +155,13 @@ export default class Node {
         this._rect.y = this.worldPosition.y - this.pivot.y * this._rect.height;
         this.isRectDirty = false;
         return this._rect;
+    }
+
+    get canvasPosition() {
+        return new Vector2(
+            this.rect.x,
+            GameManager.instance.screenHeight - this.rect.y - this.rect.height
+        );
     }
 
     addChild(node) {

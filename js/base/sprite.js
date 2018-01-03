@@ -16,38 +16,21 @@ export default class Sprite extends Node {
             return;
         }
 
-        Sprite.renderImg(ctx, this.img, this);
+        Sprite.renderImg(ctx, this, this.img);
         
         this.children.forEach(function(child) {
             child.render(ctx);
         });
     }
 
-    static renderImg(ctx, img, node) {
+    static renderImg(ctx, node, img) {
+        let canvasPos = node.canvasPosition;
         ctx.drawImage(
             img,
-            node.rect.x,
-            window.innerHeight - node.rect.y - node.rect.height,
+            canvasPos.x,
+            canvasPos.y,
             node.rect.width,
             node.rect.height
         );
     }
-
-    // /**
-    //  * 简单的碰撞检测定义：
-    //  * 另一个精灵的中心点处于本精灵所在的矩形内即可
-    //  * @param{Sprite} sp: Sptite的实例
-    //  */
-    // isCollideWith(sp) {
-    //     let spX = sp.x + sp.width / 2
-    //     let spY = sp.y + sp.height / 2
-
-    //     if ( !this.visible || !sp.visible )
-    //         return false
-
-    //     return !!(   spX >= this.x
-    //                         && spX <= this.x + this.width
-    //                         && spY >= this.y
-    //                         && spY <= this.y + this.height  )
-    // }
 }
