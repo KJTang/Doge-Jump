@@ -1,7 +1,10 @@
+import GameManager      from '../manager/game_manager'
 import SceneManager     from '../manager/scene_manager'
 import ActionManager    from '../manager/action_manager'
 import ActionCallFunc   from '../manager/action/action_callfunc'
+
 import Logger           from '../base/logger'
+import Vector2          from '../base/vector'
 import Scene            from '../base/scene'
 
 import Player           from '../runtime/player'
@@ -14,14 +17,14 @@ export default class PlayScene extends Scene {
         this.bg = new Background();
         this.addChild(this.bg);
 
-        this.player = new Player();
+        this.player = new Player(GameManager.instance.designWidth * 0.3, GameManager.instance.designHeight * 0.4);
         this.addChild(this.player);
     }
 
     onSwitchIn() {
-        ActionManager.instance.addAction(new ActionCallFunc(function() {
-            SceneManager.instance.switchToScene("MainScene");
-            // SceneManager.instance.quitGame = true;
-        }, 5));
+        // ActionManager.instance.addAction(new ActionCallFunc(function() {
+        //     SceneManager.instance.switchToScene("MainScene");
+        //     // SceneManager.instance.quitGame = true;
+        // }, 5));
     }
 }

@@ -154,7 +154,7 @@ export default class Main {
     }
 
     render() {
-        ctx.clearRect(0, 0, GameManager.instance.screenWidth, GameManager.instance.screenHeight);
+        ctx.clearRect(0, 0, GameManager.instance.designWidth, GameManager.instance.designHeight);
 
         SceneManager.instance.render(ctx);
     }

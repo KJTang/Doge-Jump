@@ -24,13 +24,13 @@ export default class Sprite extends Node {
     }
 
     static renderImg(ctx, node, img) {
-        let canvasPos = node.canvasPosition;
+        let canvasRect = node.canvasRect;
         ctx.drawImage(
             img,
-            canvasPos.x,
-            canvasPos.y,
-            node.rect.width,
-            node.rect.height
+            canvasRect.x,
+            canvasRect.y,
+            canvasRect.width,
+            canvasRect.height
         );
     }
 }

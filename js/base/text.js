@@ -29,18 +29,18 @@ export default class Text extends Node {
         ctx.fillStyle = style;
         ctx.font = font;
         ctx.textBaseline = baseline;
-        let canvasPos = node.canvasPosition;
+        let canvasRect = node.canvasRect;
         ctx.fillText(
             str, 
-            canvasPos.x, 
-            canvasPos.y, 
-            node.rect.width
+            canvasRect.x, 
+            canvasRect.y, 
+            canvasRect.width
         );
         // ctx.strokeText(
         //     str, 
-        //     canvasPos.x, 
-        //     canvasPos.y, 
-        //     node.rect.width
+        //     canvasRect.x, 
+        //     canvasRect.y, 
+        //     canvasRect.width
         // );
     }
 }

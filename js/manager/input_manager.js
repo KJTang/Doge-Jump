@@ -1,5 +1,6 @@
 import Manager      from './manager'
 import EventManager from './event_manager'
+import GameManager from './game_manager'
 
 import Logger       from '../base/logger'
 import Node         from '../base/node'
@@ -93,7 +94,7 @@ export default class InputManager extends Manager {
         // on select down
         for (let i = 0; i != this.selectables.length; ++i) {
             let select = this.selectables[i];
-            if (Rect.isOverlapPoint(select.rect, point)) {
+            if (Rect.isOverlapPoint(select.canvasRect, point)) {
                 this.curSelecting.push(select);
                 select.onSelectDown(point);
 
@@ -113,7 +114,7 @@ export default class InputManager extends Manager {
             let select = this.curSelecting[i];
             select.onSelectUp(point);
             // on select
-            if (Rect.isOverlapPoint(select.rect, point)) {
+            if (Rect.isOverlapPoint(select.canvasRect, point)) {
                 this.curSelecting[i].onSelect(point);
             }
         }

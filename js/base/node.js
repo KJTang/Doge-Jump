@@ -9,6 +9,7 @@ export default class Node {
     _pivot = new Vector2(0.5, 0.5);
     // rect: x y: save pivot position, w h: size
     _rect = new Rect(0, 0, 0, 0);
+    _canvasRect = new Rect(0, 0, 0, 0);
 
     isWorldPosDirty = true;
     isRectDirty = true;
@@ -61,6 +62,7 @@ export default class Node {
     setTransformDirty() {
         this.isWorldPosDirty = true;
         this.isRectDirty = true;
+        this.isCanvasRectDirty = true;
         this.isLevelDirty = true;
         this.isIndexDirty = true;
     }
@@ -157,11 +159,19 @@ export default class Node {
         return this._rect;
     }
 
-    get canvasPosition() {
-        return new Vector2(
-            this.rect.x,
-            GameManager.instance.screenHeight - this.rect.y - this.rect.height
+    get canvasRect() {
+        if (!this.isCanvasRectDirty) {
+            return this._canvasRect;
+        }
+
+        this._canvasRect = new Rect(
+            this.rect.x * GameManager.instance.scaleRate,
+            GameManager.instance.screenHeight - (this.rect.y + this.rect.height) * GameManager.instance.scaleRate, 
+            this.rect.width * GameManager.instance.scaleRate, 
+            this.rect.height * GameManager.instance.scaleRate,
         );
+        this.isCanvasRectDirty = false;
+        return this._canvasRect;
     }
 
     addChild(node) {

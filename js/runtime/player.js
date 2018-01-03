@@ -8,12 +8,11 @@ import Sprite   from '../base/sprite'
 import Logger   from '../base/logger'
 
 // 玩家相关常量设置
-const PLAYER_IMG_SRC = 'images/hero.png'
-const PLAYER_WIDTH   = 20
-const PLAYER_HEIGHT  = 20
+const PLAYER_IMG_SRC = 'images/character/dino.png'
+const PLAYER_WIDTH   = 48
+const PLAYER_HEIGHT  = 64
 
-const PLAYER_JUMP_INTERVAL = 2;
-const PLAYER_JUMP_TIME = 1; 
+const PLAYER_JUMP_TIME = 0.5; 
 const PLAYER_JUMP_HEIGHT = 100;
 // acceleration: a = 2h / t^2
 const PLAYER_JUMP_ACCE = - 2 * PLAYER_JUMP_HEIGHT / Math.pow(PLAYER_JUMP_TIME, 2);
@@ -23,11 +22,11 @@ const PLAYER_JUMP_VEL = - PLAYER_JUMP_ACCE * PLAYER_JUMP_TIME;
 // let databus = new DataBus()
 
 export default class Player extends Sprite {
-    constructor() {
+    constructor(x = 0, y = 0) {
         super(PLAYER_IMG_SRC, PLAYER_WIDTH, PLAYER_HEIGHT)
 
-        this.originX = GameManager.instance.screenWidth / 2;
-        this.originY = 100;
+        this.originX = x;
+        this.originY = y;
         this.position = new Vector2(this.originX, this.originY);
 
         // // 用于在手指移动的时候标识手指是否已经在飞机上了
@@ -59,7 +58,7 @@ export default class Player extends Sprite {
 
     onTouchStart(point) {
         let curTime = new Date().getTime();
-        if (curTime - this.lastClickTime < PLAYER_JUMP_INTERVAL * 1000) {
+        if (curTime - this.lastClickTime < PLAYER_JUMP_TIME * 2 * 1000) {
             return;
         }
         this.lastClickTime = curTime;

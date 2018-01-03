@@ -1,58 +1,39 @@
-import Sprite from '../base/sprite'
+import GameManager      from '../manager/game_manager'
+import Node             from '../base/node'
+import Sprite           from '../base/sprite'
+import Vector2          from '../base/vector'
 
-const screenWidth  = window.innerWidth
-const screenHeight = window.innerHeight
+const BG_IMG_SRC    = 'images/background.png'
+const BG_WIDTH      = GameManager.instance.designWidth;
+const BG_HEIGHT     = GameManager.instance.designHeight;
+const BG_MOVE_SPEED = 30;  // pixel per second
 
-const BG_IMG_SRC   = 'images/bg.jpg'
-const BG_WIDTH     = 512
-const BG_HEIGHT    = 512
-
-/**
- * 游戏背景类
- * 提供update和render函数实现无限滚动的背景功能
- */
-export default class BackGround extends Sprite {
+export default class BackGround extends Node {
     constructor() {
-        super(BG_IMG_SRC, BG_WIDTH, BG_HEIGHT)
-        this.top = 0
+        super(BG_WIDTH, BG_HEIGHT);
+        this.bg1 = new Sprite(BG_IMG_SRC, BG_WIDTH, BG_HEIGHT);
+        this.bg1.pivot = new Vector2(0, 0);
+        this.bg1.position = new Vector2(0, 0);
+        this.addChild(this.bg1);
+
+        this.bg2 = new Sprite(BG_IMG_SRC, BG_WIDTH, BG_HEIGHT);
+        this.bg2.pivot = new Vector2(0, 0);
+        this.bg2.position = new Vector2(BG_WIDTH, 0);
+        this.addChild(this.bg2);
     }
 
-    update() {
-        this.top += 2
+    update(dt) {
+        let offset = BG_MOVE_SPEED * dt;
+        let x1 = this.bg1.position.x - offset;
+        if (x1 <= -BG_WIDTH) {
+            x1 = BG_WIDTH;
+        }
+        let x2 = this.bg2.position.x - offset;
+        if (x2 <= -BG_WIDTH) {
+            x2 = BG_WIDTH;
+        }
 
-        if ( this.top >= screenHeight )
-            this.top = 0
-    }
-
-    /**
-     * 背景图重绘函数
-     * 绘制两张图片，两张图片大小和屏幕一致
-     * 第一张漏出高度为top部分，其余的隐藏在屏幕上面
-     * 第二张补全除了top高度之外的部分，其余的隐藏在屏幕下面
-     */
-    render(ctx) {
-        ctx.drawImage(
-            this.img,
-            0,
-            0,
-            this.width,
-            this.height,
-            0,
-            -screenHeight + this.top,
-            screenWidth,
-            screenHeight
-        )
-
-        ctx.drawImage(
-            this.img,
-            0,
-            0,
-            this.width,
-            this.height,
-            0,
-            this.top,
-            screenWidth,
-            screenHeight
-        )
+        this.bg1.position = new Vector2(x1, 0);
+        this.bg2.position = new Vector2(x2, 0);
     }
 }
