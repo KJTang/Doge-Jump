@@ -1,4 +1,5 @@
 import Sprite  from './sprite'
+import Logger  from 'logger'
 import DataBus from '../databus'
 
 let databus = new DataBus()
@@ -35,6 +36,8 @@ export default class Animation extends Sprite {
     // 帧图片集合
     this.imgList = []
 
+    // 帧动画间隔计数
+    this.timetick = 0;
     /**
      * 推入到全局动画池里面
      * 便于全局绘图的时候遍历和绘制当前动画帧
@@ -57,34 +60,34 @@ export default class Animation extends Sprite {
     this.count = imgList.length
   }
 
-  // 将播放中的帧绘制到canvas上
-  aniRender(ctx) {
-    ctx.drawImage(
-      this.imgList[this.index],
-      this.x,
-      this.y,
-      this.width  * 1.2,
-      this.height * 1.2
-    )
-  }
+  // // 将播放中的帧绘制到canvas上
+  // aniRender(ctx) {
+  //   ctx.drawImage(
+  //     this.imgList[this.index],
+  //     this.x,
+  //     this.y,
+  //     this.width  * 1.2,
+  //     this.height * 1.2
+  //   )
+  // }
 
-  // 播放预定的帧动画
-  playAnimation(index = 0, loop = false) {
-    // 动画播放的时候精灵图不再展示，播放帧动画的具体帧
-    this.visible   = false
+  // // 播放预定的帧动画
+  // playAnimation(index = 0, loop = false) {
+  //   // 动画播放的时候精灵图不再展示，播放帧动画的具体帧
+  //   this.visible   = false
 
-    this.isPlaying = true
-    this.loop      = loop
+  //   this.isPlaying = true
+  //   this.loop      = loop
 
-    this.index     = index
+  //   this.index     = index
 
-    if ( this.interval > 0 && this.count ) {
-      this[__.timer] = setInterval(
-        this.frameLoop.bind(this),
-        this.interval
-      )
-    }
-  }
+  //   if ( this.interval > 0 && this.count ) {
+  //     this[__.timer] = setInterval(
+  //       this.frameLoop.bind(this),
+  //       this.interval
+  //     )
+  //   }
+  // }
 
   // 停止帧动画播放
   stop() {
@@ -94,19 +97,72 @@ export default class Animation extends Sprite {
       clearInterval(this[__.timer])
   }
 
+  // // 帧遍历
+  // frameLoop() {
+  //   this.index++
+
+  //   if ( this.index > this.count - 1 ) {
+  //     if ( this.loop ) {
+  //       this.index = 0
+  //     }
+
+  //     else {
+  //       this.index--
+  //       this.stop()
+  //     }
+  //   }
+  // }
   // 帧遍历
-  frameLoop() {
-    this.index++
+  // 播放预定的帧动画
+  // 将播放中的帧绘制到canvas上
+  render(ctx) {
+    Logger.print(this.imgList[this.index]);
 
-    if ( this.index > this.count - 1 ) {
-      if ( this.loop ) {
-        this.index = 0
-      }
+    ctx.drawImage(
+      this.imgList[this.index],
+      0,
+      0,
+      this.width,
+      this.height,
+      this.worldPosition.x,
+      window.innerHeight - this.worldPosition.y,
+      this.width,
+      this.height
+    );
 
-      else {
-        this.index--
-        this.stop()
+    this.children.forEach(function (child) {
+      child.render(ctx);
+    });    
+  }
+
+  playAnimation(index = 0, loop = false, interval = 1000 / 60) {
+    // 动画播放的时候精灵图不再展示，播放帧动画的具体帧
+    this.visible = false;
+
+    this.isPlaying = true;
+    this.loop = loop;
+
+    this.index = index;
+    this.interval = interval;
+  }
+
+  update(dt) {
+    super.update(dt);
+    this.timetick += dt;
+    Logger.print(this.timetick)
+    if(this.isPlaying &&this.timetick >= this.interval){
+      this.timetick = 0;
+      this.index++;
+      if (this.index > this.count - 1) {
+        if (this.loop) {
+          this.index = 0;
+        }
+        else {
+          this.index--;
+          this.stop();
+        }
       }
     }
   }
+
 }
