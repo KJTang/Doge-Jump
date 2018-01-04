@@ -1,6 +1,6 @@
 import Manager      from './manager'
 import EventManager from './event_manager'
-import GameManager from './game_manager'
+import GameManager  from './game_manager'
 
 import Logger       from '../base/logger'
 import Node         from '../base/node'

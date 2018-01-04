@@ -165,8 +165,8 @@ export default class Node {
         }
 
         this._canvasRect = new Rect(
-            this.rect.x * GameManager.instance.scaleRate,
-            GameManager.instance.screenHeight - (this.rect.y + this.rect.height) * GameManager.instance.scaleRate, 
+            this.rect.x * GameManager.instance.scaleRate + GameManager.instance.scaleOffset.x,
+            GameManager.instance.screenHeight - (this.rect.y + this.rect.height) * GameManager.instance.scaleRate + GameManager.instance.scaleOffset.y, 
             this.rect.width * GameManager.instance.scaleRate, 
             this.rect.height * GameManager.instance.scaleRate,
         );

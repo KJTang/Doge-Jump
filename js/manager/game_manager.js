@@ -4,7 +4,9 @@ import Logger   from '../base/logger'
 
 export default class GameManager extends Manager {
     _designResolution = new Vector2(window.innerWidth, window.innerHeight);
+    _designStyle = 1;
     _scaleRate = 1;
+    _scaleOffset = new Vector2(0, 0);
 
     static get instance() {
         if (this._instance == null) {
@@ -15,7 +17,10 @@ export default class GameManager extends Manager {
 
     restart() {
         this.designResolution = new Vector2(360, 640);
-        Logger.print("GameManager scaleRate: " + this.scaleRate);
+        this.designStyle = 1;
+        Logger.print("GameManager: designResolution: " + this.designResolution);
+        Logger.print("GameManager: screenSize: " + new Vector2(this.screenWidth, this.screenHeight).toString());
+        Logger.print("GameManager: scaleRate: " + this.scaleRate);
     }
 
     get screenWidth() {
@@ -29,8 +34,19 @@ export default class GameManager extends Manager {
     set designResolution(value) {
         this._designResolution = value;
 
-        // default: fit width, expend height
-        this._scaleRate = window.innerWidth / this._designResolution.x;
+        if (this.designStyle == 1) {
+            // 1: fit width, expend height
+            this._scaleRate = window.innerWidth / this._designResolution.x;
+            this._scaleOffset = new Vector2(0, (this._designResolution.y * this._scaleRate - window.innerHeight) / 2);
+        } else if (this.designStyle == 2) {
+            // 2: fit height, expend width
+            this._scaleRate = window.innerHeight / this._designResolution.y;
+            this._scaleOffset = new Vector2((this._designResolution.x * this._scaleRate - window.innerWidth) / 2, 0);
+        } else {
+            // default: fit width, expend height
+            this._scaleRate = window.innerWidth / this._designResolution.x;
+            this._scaleOffset = new Vector2(0, (this._designResolution.y * this._scaleRate - window.innerHeight) / 2);
+        }
     }
 
     get designResolution() {
@@ -45,12 +61,25 @@ export default class GameManager extends Manager {
         return this._designResolution.y;
     }
 
+    set designStyle(value) {
+        this._designStyle = value;
+        this.designResolution = this.designResolution;
+    }
+
+    get designStyle() {
+        return this._designStyle;
+    }
+
     get scaleRate() {
         return this._scaleRate;
     }
 
+    get scaleOffset() {
+        return this._scaleOffset;
+    }
+
     transPointCanvasToWorld(pos) {
         pos.y = window.innerHeight - pos.y; // reverse coord-y
-        return new Vector2(pos.x / this.scaleRate, pos.y / this.scaleRate);
+        return new Vector2(pos.x / this.scaleRate + this.scaleOffset.x, pos.y / this.scaleRate + this.scaleOffset.y);
     }
 }
