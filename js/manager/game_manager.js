@@ -14,7 +14,7 @@ export default class GameManager extends Manager {
     }
 
     restart() {
-        this.designResolution = new Vector2(320, 568);
+        this.designResolution = new Vector2(360, 640);
         Logger.print("GameManager scaleRate: " + this.scaleRate);
     }
 
@@ -47,5 +47,10 @@ export default class GameManager extends Manager {
 
     get scaleRate() {
         return this._scaleRate;
+    }
+
+    transPointCanvasToWorld(pos) {
+        pos.y = window.innerHeight - pos.y; // reverse coord-y
+        return new Vector2(pos.x / this.scaleRate, pos.y / this.scaleRate);
     }
 }

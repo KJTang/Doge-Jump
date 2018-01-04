@@ -19,7 +19,7 @@ import PlayScene        from '../runtime/playscene'
 export default class MainScene extends Scene {
     constructor() {
         super();
-        let sprite = new Sprite('images/enemy.png', 30, 30);
+        let sprite = new Sprite('images/bg.jpg', GameManager.instance.designWidth, GameManager.instance.designHeight);
         sprite.pivot = new Vector2(0.5, 0.5);
         sprite.position = new Vector2(GameManager.instance.designWidth / 2, GameManager.instance.designHeight / 2);
         this.addChild(sprite);
@@ -36,7 +36,7 @@ export default class MainScene extends Scene {
         // this.addChild(button2);
 
         let startBtn = new Button('images/ui/BtnStartNormal.png', 'images/ui/BtnStartSelected.png', 128, 64, function(point) {
-            SceneManager.instance.switchToScene("PlayScene");
+            // SceneManager.instance.switchToScene("PlayScene");
         });
         startBtn.position = new Vector2(100, 100);
         startBtn.position = new Vector2(GameManager.instance.designWidth / 2, GameManager.instance.designHeight / 2);

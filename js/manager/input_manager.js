@@ -30,7 +30,7 @@ export default class InputManager extends Manager {
         e.preventDefault();
         this.curTouchX = e.touches[0].clientX;
         this.curTouchY = e.touches[0].clientY;
-        let pos = Vector2.transPos(new Vector2(this.curTouchX, this.curTouchY));
+        let pos = GameManager.instance.transPointCanvasToWorld(new Vector2(this.curTouchX, this.curTouchY));
         this.isTouching = true;
 
         this.handleSelectDown();
@@ -46,7 +46,7 @@ export default class InputManager extends Manager {
 
     onTouchEnd(e) {
         e.preventDefault();
-        let pos = Vector2.transPos(new Vector2(this.curTouchX, this.curTouchY));
+        let pos = GameManager.instance.transPointCanvasToWorld(new Vector2(this.curTouchX, this.curTouchY));
         this.isTouching = false;
 
         this.handleSelectUp();
@@ -88,13 +88,15 @@ export default class InputManager extends Manager {
     }
 
     handleSelectDown() {
-        let point = Vector2.transPos(new Vector2(this.curTouchX, this.curTouchY));
+        let point = GameManager.instance.transPointCanvasToWorld(new Vector2(this.curTouchX, this.curTouchY));
         this.curSelecting = [];
 
         // on select down
         for (let i = 0; i != this.selectables.length; ++i) {
             let select = this.selectables[i];
-            if (Rect.isOverlapPoint(select.canvasRect, point)) {
+            // Logger.print("handleSelectDown: " + select.rect.toString());
+            // Logger.print("handleSelectDown: " + point.toString());
+            if (Rect.isOverlapPoint(select.rect, point)) {
                 this.curSelecting.push(select);
                 select.onSelectDown(point);
 
@@ -107,14 +109,14 @@ export default class InputManager extends Manager {
     }
 
     handleSelectUp() {
-        let point = Vector2.transPos(new Vector2(this.curTouchX, this.curTouchY));
+        let point = GameManager.instance.transPointCanvasToWorld(new Vector2(this.curTouchX, this.curTouchY));
 
         // on select up
         for (let i = 0; i != this.curSelecting.length; ++i) {
             let select = this.curSelecting[i];
             select.onSelectUp(point);
             // on select
-            if (Rect.isOverlapPoint(select.canvasRect, point)) {
+            if (Rect.isOverlapPoint(select.rect, point)) {
                 this.curSelecting[i].onSelect(point);
             }
         }

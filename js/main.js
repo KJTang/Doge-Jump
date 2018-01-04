@@ -154,7 +154,9 @@ export default class Main {
     }
 
     render() {
-        ctx.clearRect(0, 0, GameManager.instance.designWidth, GameManager.instance.designHeight);
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(0, 0, GameManager.instance.screenWidth, GameManager.instance.screenHeight);
+        // ctx.clearRect(0, 0, GameManager.instance.screenWidth, GameManager.instance.screenHeight);
 
         SceneManager.instance.render(ctx);
     }
