@@ -229,12 +229,13 @@ export default class Node {
         }
     }
 
-    static destory(node) {
+    static destory(node, removeFromParent = true) {
         node.enable = false;
         node.children.forEach(function(child) {
-            Node.destory(child);
+            // cause parent has removed, no need to removeFromParent
+            Node.destory(child, false);
         });
-        if (node.parent) {
+        if (node.parent && removeFromParent) {
             node.parent.removeChild(node);
         }
     }
