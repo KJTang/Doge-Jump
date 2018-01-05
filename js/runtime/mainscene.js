@@ -8,6 +8,7 @@ import Logger           from '../base/logger'
 import Vector2          from '../base/vector'
 import Scene            from '../base/scene'
 import Sprite           from '../base/sprite'
+import Animation        from '../base/animation'
 import Text             from '../base/text'
 import Selectable       from '../base/selectable'
 import Button           from '../base/button'
@@ -46,6 +47,16 @@ export default class MainScene extends Scene {
         text.pivot = new Vector2(0, 0);
         text.position = new Vector2(GameManager.instance.designWidth / 2, GameManager.instance.designHeight / 2);
         this.addChild(text);
+
+        let anim = new Animation('images/ui/BtnStartNormal.png', 128, 64, 0.5, true);
+        this.addChild(anim);
+        anim.initFrames([
+            'images/ui/BtnStartNormal.png', 
+            'images/ui/BtnStartSelected.png'
+        ]);
+        anim.position = new Vector2(GameManager.instance.designWidth / 2, GameManager.instance.designHeight * 0.3);
+        anim.play();
+
     }
 
     onSwitchIn() {
