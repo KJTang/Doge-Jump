@@ -7,19 +7,16 @@ import Vector2  from '../base/vector'
 import Sprite   from '../base/sprite'
 import Logger   from '../base/logger'
 
-// 玩家相关常量设置
 const PLAYER_IMG_SRC = 'images/character/dino.png'
 const PLAYER_WIDTH   = 48
 const PLAYER_HEIGHT  = 64
 
-const PLAYER_JUMP_TIME = 0.5; 
+const PLAYER_JUMP_TIME = 0.3; 
 const PLAYER_JUMP_HEIGHT = 100;
 // acceleration: a = 2h / t^2
 const PLAYER_JUMP_ACCE = - 2 * PLAYER_JUMP_HEIGHT / Math.pow(PLAYER_JUMP_TIME, 2);
 // init velocity: v = a * t
 const PLAYER_JUMP_VEL = - PLAYER_JUMP_ACCE * PLAYER_JUMP_TIME;
-
-// let databus = new DataBus()
 
 export default class Player extends Sprite {
     constructor(x = 0, y = 0) {
@@ -28,13 +25,6 @@ export default class Player extends Sprite {
         this.originX = x;
         this.originY = y;
         this.position = new Vector2(this.originX, this.originY);
-
-        // // 用于在手指移动的时候标识手指是否已经在飞机上了
-        // this.touched = false
-        // this.bullets = []
-
-        // // 初始化事件监听
-        // this.initEvent()
 
         this.lastClickTime = 0;
         this.isJumping = false;
@@ -45,18 +35,22 @@ export default class Player extends Sprite {
     }
 
     onEnable() {
-        EventManager.instance.addEventListener("TouchStart", this.onTouchStart.bind(this));
+        // EventManager.instance.addEventListener("TouchStart", this.onTouchStart.bind(this));
     }
 
     onDisable() {
-        EventManager.instance.removeEventListener("TouchStart", this.onTouchStart.bind(this));
+        // EventManager.instance.removeEventListener("TouchStart", this.onTouchStart.bind(this));
     }
 
     update(dt) {
-        this.jump(dt);
+        this.jumpUpdate(dt);
     }
 
-    onTouchStart(point) {
+    // onTouchStart(point) {
+    //     this.jump();
+    // }
+
+    jump() {
         let curTime = new Date().getTime();
         if (curTime - this.lastClickTime < PLAYER_JUMP_TIME * 2 * 1000) {
             return;
@@ -67,7 +61,7 @@ export default class Player extends Sprite {
         this.curJumpTime = 0;
     }
 
-    jump(dt) {
+    jumpUpdate(dt) {
         // start jump
         if (!this.isJumping) {
             return;

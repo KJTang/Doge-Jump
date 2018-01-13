@@ -146,6 +146,7 @@ export default class Main {
     update(dt) {
         // this.collisionDetection()
 
+        GameManager.instance.update(dt);
         SceneManager.instance.update(dt);
         ActionManager.instance.update(dt);
     }

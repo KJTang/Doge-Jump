@@ -2,6 +2,10 @@ import Manager  from './manager'
 import Vector2  from '../base/vector'
 import Logger   from '../base/logger'
 
+const GAME_LEVEL_INTERVAL = [5, 5, 5, 5, 5];
+const GAME_SCORE_INTERVAL = [0.5, 0.5, 0.4, 0.3, 0.2, 0.1];
+const GAME_MAX_LEVEL = 5;
+
 export default class GameManager extends Manager {
     _designResolution = new Vector2(window.innerWidth, window.innerHeight);
     _designStyle = 1;
@@ -21,6 +25,45 @@ export default class GameManager extends Manager {
         Logger.print("GameManager: designResolution: " + this.designResolution);
         Logger.print("GameManager: screenSize: " + new Vector2(this.screenWidth, this.screenHeight).toString());
         Logger.print("GameManager: scaleRate: " + this.scaleRate);
+
+        // game data
+        this._level = 0;
+        this._score = 0;
+
+        this.levelTimer = 0;
+        this.scoreTimer = 0;
+    }
+
+    update(dt) {
+        this.levelTimer += dt;
+        if (this.levelTimer >= GAME_LEVEL_INTERVAL[this.level]) {
+            this.levelTimer = 0;
+            this.levelUp();
+        }
+
+        this.scoreTimer += dt;
+        if (this.scoreTimer >= GAME_SCORE_INTERVAL[this.level]) {
+            this.scoreUp(Math.floor(this.scoreTimer / GAME_SCORE_INTERVAL[this.level]));
+            this.scoreTimer = 0;
+        }
+    }
+
+    get level() {
+        return this._level;
+    }
+
+    levelUp(up = 1) {
+        if (this._level != GAME_MAX_LEVEL) {
+            this._level += up;
+        }
+    }
+
+    get score() {
+        return this._score;
+    }
+
+    scoreUp(up = 1) {
+        this._score += up;
     }
 
     get screenWidth() {
