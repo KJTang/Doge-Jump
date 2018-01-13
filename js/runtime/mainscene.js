@@ -20,11 +20,14 @@ import PlayScene        from '../runtime/playscene'
 export default class MainScene extends Scene {
     constructor() {
         super();
-        let sprite = new Sprite('images/bg.jpg', GameManager.instance.designWidth, GameManager.instance.designHeight);
-        sprite.pivot = new Vector2(0.5, 0.5);
-        sprite.position = new Vector2(GameManager.instance.designWidth / 2, GameManager.instance.designHeight / 2);
-        this.addChild(sprite);
 
+        // // sprite test
+        // let sprite = new Sprite('images/bg.jpg', GameManager.instance.designWidth, GameManager.instance.designHeight);
+        // sprite.pivot = new Vector2(0.5, 0.5);
+        // sprite.position = new Vector2(GameManager.instance.designWidth / 2, GameManager.instance.designHeight / 2);
+        // this.addChild(sprite);
+
+        // // button test
         // let button = new Button('images/enemy.png', 'images/hero.png', 100, 100, function(point) {
         //     Logger.print("button onSelect: " + point.toString());
         // });
@@ -36,27 +39,28 @@ export default class MainScene extends Scene {
         // button2.position = new Vector2(50, 0);
         // this.addChild(button2);
 
+        // // text test
+        // let text = new Text('images/enemy.png', 100, "#ff0000", "bottom");
+        // text.pivot = new Vector2(0, 0);
+        // text.position = new Vector2(GameManager.instance.designWidth / 2, GameManager.instance.designHeight / 2);
+        // this.addChild(text);
+
+        // // animation test
+        // let anim = new Animation('images/ui/BtnStartNormal.png', 128, 64, 0.5, true);
+        // this.addChild(anim);
+        // anim.initFrames([
+        //     'images/ui/BtnStartNormal.png', 
+        //     'images/ui/BtnStartSelected.png'
+        // ]);
+        // anim.position = new Vector2(GameManager.instance.designWidth / 2, GameManager.instance.designHeight * 0.3);
+        // anim.play();
+
         let startBtn = new Button('images/ui/BtnStartNormal.png', 'images/ui/BtnStartSelected.png', 128, 64, function(point) {
             SceneManager.instance.switchToScene("PlayScene");
         });
         startBtn.position = new Vector2(100, 100);
         startBtn.position = new Vector2(GameManager.instance.designWidth / 2, GameManager.instance.designHeight / 2);
         this.addChild(startBtn);
-
-        let text = new Text('images/enemy.png', 100, "#ff0000", "bottom");
-        text.pivot = new Vector2(0, 0);
-        text.position = new Vector2(GameManager.instance.designWidth / 2, GameManager.instance.designHeight / 2);
-        this.addChild(text);
-
-        let anim = new Animation('images/ui/BtnStartNormal.png', 128, 64, 0.5, true);
-        this.addChild(anim);
-        anim.initFrames([
-            'images/ui/BtnStartNormal.png', 
-            'images/ui/BtnStartSelected.png'
-        ]);
-        anim.position = new Vector2(GameManager.instance.designWidth / 2, GameManager.instance.designHeight * 0.3);
-        anim.play();
-
     }
 
     onSwitchIn() {

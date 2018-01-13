@@ -63,7 +63,8 @@ export default class Main {
         SceneManager.instance.addScene("PlayScene", function() {
             return new PlayScene();
         });
-        SceneManager.instance.switchToScene("MainScene");
+        // SceneManager.instance.switchToScene("MainScene");
+        SceneManager.instance.switchToScene("PlayScene");
 
         // game loop
         window.requestAnimationFrame(this.loop.bind(this), canvas);
@@ -154,7 +155,7 @@ export default class Main {
     }
 
     render() {
-        ctx.fillStyle = "#000000";
+        ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, GameManager.instance.screenWidth, GameManager.instance.screenHeight);
         // ctx.clearRect(0, 0, GameManager.instance.screenWidth, GameManager.instance.screenHeight);
 

@@ -182,6 +182,7 @@ export default class Node {
     removeChild(node) {
         for (var i = 0; i != this.children.length; ++i) {
             if (this.children[i] == node) {
+                node.parent = null;
                 this.children.splice(i--, 1);
                 break;
             }

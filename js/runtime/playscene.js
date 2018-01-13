@@ -9,13 +9,18 @@ import Scene            from '../base/scene'
 
 import Player           from '../runtime/player'
 import Background       from '../runtime/background'
+import RockCreator      from '../runtime/rock_creator'
 
 export default class PlayScene extends Scene {
     constructor() {
         super();
 
-        this.bg = new Background();
-        this.addChild(this.bg);
+        // this.bg = new Background();
+        // this.addChild(this.bg);
+
+        this.rockCreator = new RockCreator();
+        this.addChild(this.rockCreator);
+        this.rockCreator.start();
 
         this.player = new Player(GameManager.instance.designWidth * 0.3, GameManager.instance.designHeight * 0.4);
         this.addChild(this.player);
