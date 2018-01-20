@@ -4,6 +4,7 @@ import Logger       from '../base/logger'
 import Node         from '../base/node'
 import Sprite       from '../base/sprite'
 import Vector2      from '../base/vector'
+import Rect         from '../base/rect'
 
 // function rnd(start, end){
 //     return Math.floor(Math.random() * (end - start) + start)
@@ -66,6 +67,14 @@ export default class RockCreator extends Node {
             rock.position = new Vector2(GameManager.instance.designWidth + ROCK_WIDTH, GameManager.instance.designHeight * 0.4);
             this.addChild(rock);
             this.rocks.push(rock);
+            rock.getBoundingBox = function(argument) {
+                let rect = new Rect();
+                rect.x = this.canvasRect.x + this.canvasRect.width / 4;
+                rect.y = this.canvasRect.y + this.canvasRect.height / 4;
+                rect.width = this.canvasRect.width / 2;
+                rect.height = this.canvasRect.height / 2;
+                return rect; 
+            }
             PhysicsManager.instance.addCollider("ROCK", rock);
         }
     }

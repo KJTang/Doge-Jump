@@ -1,12 +1,11 @@
-// import Bullet   from '../player/bullet'
-// import DataBus  from '../databus'
-
 import GameManager      from '../manager/game_manager'
 import EventManager     from '../manager/event_manager'
 import PhysicsManager   from '../manager/physics_manager'
-import Vector2  from '../base/vector'
-import Sprite   from '../base/sprite'
-import Logger   from '../base/logger'
+import SceneManager     from '../manager/scene_manager'
+import Vector2          from '../base/vector'
+import Sprite           from '../base/sprite'
+import Logger           from '../base/logger'
+import Rect             from '../base/rect'
 
 const PLAYER_IMG_SRC = 'images/character/dino.png'
 const PLAYER_WIDTH   = 48
@@ -86,7 +85,17 @@ export default class Player extends Sprite {
         this.curJumpTime += dt;
     }
 
+    getBoundingBox() {
+        let rect = new Rect();
+        rect.x = this.canvasRect.x + this.canvasRect.width / 4;
+        rect.y = this.canvasRect.y + this.canvasRect.height / 4;
+        rect.width = this.canvasRect.width / 2;
+        rect.height = this.canvasRect.height / 2;
+        return rect; 
+    }
+
     onCollisionBegin(other) {
-        Logger.print("Player: onCollisionBegin");
+        // Logger.print("Player: onCollisionBegin");
+        SceneManager.instance.quitGame = true;
     }
 }
