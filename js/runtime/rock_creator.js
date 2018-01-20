@@ -1,4 +1,5 @@
-import GameManager  from '../manager/game_manager'
+import GameManager      from '../manager/game_manager'
+import PhysicsManager   from '../manager/physics_manager'
 import Logger       from '../base/logger'
 import Node         from '../base/node'
 import Sprite       from '../base/sprite'
@@ -24,6 +25,9 @@ export default class RockCreator extends Node {
         this.creating = false;
     }
 
+    onEnable() {
+    }
+
     update(dt) {
         this.move(dt);
         this.create(dt);
@@ -40,6 +44,7 @@ export default class RockCreator extends Node {
             let rock = this.rocks[i];
             rock.position = new Vector2(rock.position.x - ROCK_MOVE_SPEED[GameManager.instance.level] * dt, rock.position.y);
             if (rock.position.x < -ROCK_WIDTH) {
+                PhysicsManager.instance.removeCollider("ROCK", rock);
                 this.rocks.splice(i--, 1);
                 Node.destory(rock);
             }
@@ -59,8 +64,9 @@ export default class RockCreator extends Node {
             // Logger.print("create rock");
             let rock = new Sprite(ROCK_IMG_SRC, ROCK_WIDTH, ROCK_HEIGHT);
             rock.position = new Vector2(GameManager.instance.designWidth + ROCK_WIDTH, GameManager.instance.designHeight * 0.4);
-            this.rocks.push(rock);
             this.addChild(rock);
+            this.rocks.push(rock);
+            PhysicsManager.instance.addCollider("ROCK", rock);
         }
     }
 }

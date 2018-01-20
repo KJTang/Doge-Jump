@@ -13,15 +13,20 @@ export default class Rect {
     }
 
     static isOverlapPoint(rect, point) {
-        if (point.x > rect.x && (point.x < rect.x + rect.width) && 
-            point.y > rect.y && (point.y < rect.y + rect.height)) {
+        if (point.x >= rect.x && (point.x <= rect.x + rect.width) && 
+            point.y >= rect.y && (point.y <= rect.y + rect.height)) {
             return true;
         } 
         return false;
     }
 
     static isOverlapRect(recta, rectb) {
-        // TODO: 
+        if (recta.x <= rectb.x + rectb.width && 
+            recta.y <= rectb.y + rectb.height && 
+            rectb.x <= recta.x + recta.width && 
+            rectb.y <= recta.y + recta.height) {
+            return true;
+        }
         return false;
     }
 }

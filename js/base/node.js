@@ -174,6 +174,22 @@ export default class Node {
         return this._canvasRect;
     }
 
+    getBoundingBox() {
+        return this.canvasRect; 
+    }
+
+    onCollisionBegin(other) {
+        // Logger.print("onCollisionBegin");
+    }
+
+    onCollision(other) {
+        // Logger.print("onCollision");
+    }
+
+    onCollisionEnd(other) {
+        // Logger.print("onCollisionEnd");
+    }
+
     addChild(node) {
         node.setParent(this);
         this.children.push(node);

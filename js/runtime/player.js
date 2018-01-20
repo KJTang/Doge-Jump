@@ -3,6 +3,7 @@
 
 import GameManager      from '../manager/game_manager'
 import EventManager     from '../manager/event_manager'
+import PhysicsManager   from '../manager/physics_manager'
 import Vector2  from '../base/vector'
 import Sprite   from '../base/sprite'
 import Logger   from '../base/logger'
@@ -35,11 +36,17 @@ export default class Player extends Sprite {
     }
 
     onEnable() {
+        super.onEnable();
         // EventManager.instance.addEventListener("TouchStart", this.onTouchStart.bind(this));
+        PhysicsManager.instance.addCollider("PLAYER", this);
+        PhysicsManager.instance.addRule("PLAYER", "ROCK");
     }
 
     onDisable() {
+        super.onDisable();
         // EventManager.instance.removeEventListener("TouchStart", this.onTouchStart.bind(this));
+        PhysicsManager.instance.removeCollider("PLAYER", this);
+        PhysicsManager.instance.removeRule("PLAYER", "ROCK");
     }
 
     update(dt) {
@@ -79,98 +86,7 @@ export default class Player extends Sprite {
         this.curJumpTime += dt;
     }
 
-    // /**
-    //  * 当手指触摸屏幕的时候
-    //  * 判断手指是否在飞机上
-    //  * @param {Number} x: 手指的X轴坐标
-    //  * @param {Number} y: 手指的Y轴坐标
-    //  * @return {Boolean}: 用于标识手指是否在飞机上的布尔值
-    //  */
-    // checkIsFingerOnAir(x, y) {
-    //     const deviation = 30
-
-    //     return !!(   x >= this.x - deviation
-    //                         && y >= this.y - deviation
-    //                         && x <= this.x + this.width + deviation
-    //                         && y <= this.y + this.height + deviation  )
-    // }
-
-    // /**
-    //  * 根据手指的位置设置飞机的位置
-    //  * 保证手指处于飞机中间
-    //  * 同时限定飞机的活动范围限制在屏幕中
-    //  */
-    // setAirPosAcrossFingerPosZ(x, y) {
-    //     let disX = x - this.width / 2
-    //     let disY = y - this.height / 2
-
-    //     if ( disX < 0 )
-    //         disX = 0
-
-    //     else if ( disX > screenWidth - this.width )
-    //         disX = screenWidth - this.width
-
-    //     if ( disY <= 0 )
-    //         disY = 0
-
-    //     else if ( disY > screenHeight - this.height )
-    //         disY = screenHeight - this.height
-
-    //     this.x = disX
-    //     this.y = disY
-    // }
-
-    // /**
-    //  * 玩家响应手指的触摸事件
-    //  * 改变战机的位置
-    //  */
-    // initEvent() {
-    //     canvas.addEventListener('touchstart', ((e) => {
-    //         e.preventDefault()
-
-    //         let x = e.touches[0].clientX
-    //         let y = e.touches[0].clientY
-
-    //         //
-    //         if ( this.checkIsFingerOnAir(x, y) ) {
-    //             this.touched = true
-
-    //             this.setAirPosAcrossFingerPosZ(x, y)
-    //         }
-
-    //     }).bind(this))
-
-    //     canvas.addEventListener('touchmove', ((e) => {
-    //         e.preventDefault()
-
-    //         let x = e.touches[0].clientX
-    //         let y = e.touches[0].clientY
-
-    //         if ( this.touched )
-    //             this.setAirPosAcrossFingerPosZ(x, y)
-
-    //     }).bind(this))
-
-    //     canvas.addEventListener('touchend', ((e) => {
-    //         e.preventDefault()
-
-    //         this.touched = false
-    //     }).bind(this))
-    // }
-
-    // /**
-    //  * 玩家射击操作
-    //  * 射击时机由外部决定
-    //  */
-    // shoot() {
-    //     let bullet = databus.pool.getItemByClass('bullet', Bullet)
-
-    //     bullet.init(
-    //         this.x + this.width / 2 - bullet.width / 2,
-    //         this.y - 10,
-    //         10
-    //     )
-
-    //     // databus.bullets.push(bullet)
-    // }
+    onCollisionBegin(other) {
+        Logger.print("Player: onCollisionBegin");
+    }
 }
