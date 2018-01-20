@@ -65,8 +65,8 @@ export default class Main {
         SceneManager.instance.addScene("PlayScene", function() {
             return new PlayScene();
         });
-        // SceneManager.instance.switchToScene("MainScene");
-        SceneManager.instance.switchToScene("PlayScene");
+        SceneManager.instance.switchToScene("MainScene");
+        // SceneManager.instance.switchToScene("PlayScene");
 
         // game loop
         window.requestAnimationFrame(this.loop.bind(this), canvas);
