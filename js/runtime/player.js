@@ -3,13 +3,16 @@ import EventManager     from '../manager/event_manager'
 import PhysicsManager   from '../manager/physics_manager'
 import SceneManager     from '../manager/scene_manager'
 import Vector2          from '../base/vector'
+import Node             from '../base/node'
 import Sprite           from '../base/sprite'
+import Animation        from '../base/animation'
 import Logger           from '../base/logger'
 import Rect             from '../base/rect'
+import String           from '../utility/utility_string'
 
-const PLAYER_IMG_SRC = 'images/character/dino.png'
-const PLAYER_WIDTH   = 48
-const PLAYER_HEIGHT  = 64
+const PLAYER_IMG_SRC = 'images/character/doge_{0}.jpg'
+const PLAYER_WIDTH   = 64
+const PLAYER_HEIGHT  = 48
 
 const PLAYER_JUMP_TIME = 0.3; 
 const PLAYER_JUMP_HEIGHT = 100;
@@ -20,7 +23,7 @@ const PLAYER_JUMP_VEL = - PLAYER_JUMP_ACCE * PLAYER_JUMP_TIME;
 
 export default class Player extends Sprite {
     constructor(x = 0, y = 0) {
-        super(PLAYER_IMG_SRC, PLAYER_WIDTH, PLAYER_HEIGHT)
+        super('', PLAYER_WIDTH, PLAYER_HEIGHT);
 
         this.originX = x;
         this.originY = y;
@@ -32,6 +35,23 @@ export default class Player extends Sprite {
 
         this.jumpFrameCounter = 0;
         this.jumpIsUp = true;
+
+        // let frames = [];
+        // for (let i = 0; i != 6; ++i) {
+        //     frames.push(PLAYER_IMG_SRC.formatUnicorn(i.toString()));
+        // }
+        // this.initFrames(frames);
+        // this.play();
+
+
+        let frames = [];
+        for (let i = 0; i != 6; ++i) {
+            frames.push(PLAYER_IMG_SRC.formatUnicorn(i.toString()));
+        }
+        let anim = new Animation(frames[0], PLAYER_WIDTH, PLAYER_HEIGHT);
+        anim.initFrames(frames);
+        anim.play();
+        this.addChild(anim);
     }
 
     onEnable() {
@@ -50,11 +70,8 @@ export default class Player extends Sprite {
 
     update(dt) {
         this.jumpUpdate(dt);
+        super.update(dt);
     }
-
-    // onTouchStart(point) {
-    //     this.jump();
-    // }
 
     jump() {
         let curTime = new Date().getTime();

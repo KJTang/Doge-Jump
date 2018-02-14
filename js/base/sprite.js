@@ -24,6 +24,10 @@ export default class Sprite extends Node {
     }
 
     static renderImg(ctx, node, img) {
+        if (img == null) {
+            return;
+        }
+        
         let canvasRect = node.canvasRect;
         ctx.drawImage(
             img,

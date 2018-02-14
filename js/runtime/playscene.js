@@ -39,20 +39,26 @@ export default class PlayScene extends Scene {
         this.player = new Player(gm.designWidth * 0.3, gm.designHeight * 0.4);
         this.addChild(this.player);
 
+        // // buttons
+        // let jumpBtn = new Button('images/ui/BtnStartNormal.png', 'images/ui/BtnStartSelected.png', 128, 64, function(point) {
+        //     this.player.jump();
+        // }.bind(this));
+        // jumpBtn.position = new Vector2(270, 100);
+        // this.addChild(jumpBtn);
+
+        // let fireBtn = new Button('images/ui/BtnStartNormal.png', 'images/ui/BtnStartSelected.png', 128, 64, function(point) {
+        //     // this.player.fire();
+        //     Logger.print("TODO: fire!");
+        // }.bind(this));
+        // fireBtn.position = new Vector2(90, 100);
+        // this.addChild(fireBtn);
+
         // buttons
-        let jumpBtn = new Button('images/ui/BtnStartNormal.png', 'images/ui/BtnStartSelected.png', 128, 64, function(point) {
+        let jumpBtn = new Button('', '', gm.designWidth, gm.designHeight, function(point) {
             this.player.jump();
         }.bind(this));
-        jumpBtn.position = new Vector2(270, 100);
+        jumpBtn.position = new Vector2(gm.designWidth / 2, gm.designHeight / 2);
         this.addChild(jumpBtn);
-
-        let fireBtn = new Button('images/ui/BtnStartNormal.png', 'images/ui/BtnStartSelected.png', 128, 64, function(point) {
-            // this.player.fire();
-            Logger.print("TODO: fire!");
-        }.bind(this));
-        fireBtn.position = new Vector2(90, 100);
-        this.addChild(fireBtn);
-
     }
 
     update(dt) {

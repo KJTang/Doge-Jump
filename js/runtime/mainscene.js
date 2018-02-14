@@ -17,6 +17,8 @@ import Player           from '../runtime/player'
 import Background       from '../runtime/background'
 import PlayScene        from '../runtime/playscene'
 
+let gm = GameManager.instance;
+
 export default class MainScene extends Scene {
     constructor() {
         super();
@@ -59,7 +61,7 @@ export default class MainScene extends Scene {
             SceneManager.instance.switchToScene("PlayScene");
         });
         startBtn.position = new Vector2(100, 100);
-        startBtn.position = new Vector2(GameManager.instance.designWidth / 2, GameManager.instance.designHeight / 2);
+        startBtn.position = new Vector2(gm.designWidth / 2, gm.designHeight / 2);
         this.addChild(startBtn);
     }
 

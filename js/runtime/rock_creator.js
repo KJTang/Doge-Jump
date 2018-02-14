@@ -35,9 +35,9 @@ export default class RockCreator extends Node {
     }
 
     start() {
-        this.createTimer = 0;
-        this.creating = true;
-        this.curInterval = ROCK_CREATE_INTERVAL[GameManager.instance.level] * (Math.random() * 0.4 - 0.2); // +- 20%
+        // this.createTimer = 0;
+        // this.creating = true;
+        // this.curInterval = ROCK_CREATE_INTERVAL[GameManager.instance.level] * (Math.random() * 0.4 - 0.2); // +- 20%
     }
 
     move(dt) {
