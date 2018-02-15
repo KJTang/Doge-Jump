@@ -1,10 +1,12 @@
 import GameManager      from '../manager/game_manager'
+import EventManager     from '../manager/event_manager'
 import SceneManager     from '../manager/scene_manager'
 import ActionManager    from '../manager/action_manager'
 import ActionCallFunc   from '../manager/action/action_callfunc'
 
 import Logger           from '../base/logger'
 import Vector2          from '../base/vector'
+import Sprite           from '../base/sprite'
 import Scene            from '../base/scene'
 import Text             from '../base/text'
 import Button           from '../base/button'
@@ -39,26 +41,23 @@ export default class PlayScene extends Scene {
         this.player = new Player(gm.designWidth * 0.3, gm.designHeight * 0.4);
         this.addChild(this.player);
 
-        // // buttons
-        // let jumpBtn = new Button('images/ui/BtnStartNormal.png', 'images/ui/BtnStartSelected.png', 128, 64, function(point) {
-        //     this.player.jump();
-        // }.bind(this));
-        // jumpBtn.position = new Vector2(270, 100);
-        // this.addChild(jumpBtn);
-
-        // let fireBtn = new Button('images/ui/BtnStartNormal.png', 'images/ui/BtnStartSelected.png', 128, 64, function(point) {
-        //     // this.player.fire();
-        //     Logger.print("TODO: fire!");
-        // }.bind(this));
-        // fireBtn.position = new Vector2(90, 100);
-        // this.addChild(fireBtn);
-
         // buttons
-        let jumpBtn = new Button('', '', gm.designWidth, gm.designHeight, function(point) {
+        this.jumpBtn = new Button('', '', gm.designWidth, gm.designHeight, function(point) {
             this.player.jump();
         }.bind(this));
-        jumpBtn.position = new Vector2(gm.designWidth / 2, gm.designHeight / 2);
-        this.addChild(jumpBtn);
+        this.jumpBtn.position = new Vector2(gm.designWidth / 2, gm.designHeight / 2);
+        this.addChild(this.jumpBtn);
+
+        // dialog
+        this.dialog = new Sprite('images/ui/BtnStartNormal.png', gm.designWidth * 0.8, gm.designHeight * 0.5);
+        this.dialog.position = new Vector2(gm.designWidth / 2, gm.designHeight / 2);
+        let dialogBtn = new Button('images/ui/BtnStartNormal.png', 'images/ui/BtnStartSelected.png', 128, 64, function(point) {
+            // SceneManager.instance.switchToScene('MainScene');
+            SceneManager.instance.quitGame = true;
+        }.bind(this));
+        dialogBtn.position = new Vector2(0, -64);
+        this.dialog.addChild(dialogBtn);
+        this.addChild(this.dialog);
     }
 
     update(dt) {
@@ -75,10 +74,21 @@ export default class PlayScene extends Scene {
         super.update(dt);
     }
 
+    onEnable() {
+        EventManager.instance.addEventListener("YouDied", this.onPlayerDied.bind(this));
+    }
+
+    onDisable() {
+        EventManager.instance.removeEventListener("YouDied", this.onPlayerDied.bind(this));
+    }
+
     onSwitchIn() {
-        // ActionManager.instance.addAction(new ActionCallFunc(function() {
-        //     SceneManager.instance.switchToScene("MainScene");
-        //     // SceneManager.instance.quitGame = true;
-        // }, 5));
+        this.jumpBtn.enable = true;
+        this.dialog.enable = false;
+    }
+
+    onPlayerDied() {
+        this.jumpBtn.enable = false;
+        this.dialog.enable = true;
     }
 }

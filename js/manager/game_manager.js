@@ -35,17 +35,17 @@ export default class GameManager extends Manager {
     }
 
     update(dt) {
-        this.levelTimer += dt;
-        if (this.levelTimer >= GAME_LEVEL_INTERVAL[this.level]) {
-            this.levelTimer = 0;
-            this.levelUp();
-        }
+        // this.levelTimer += dt;
+        // if (this.levelTimer >= GAME_LEVEL_INTERVAL[this.level]) {
+        //     this.levelTimer = 0;
+        //     this.levelUp();
+        // }
 
-        this.scoreTimer += dt;
-        if (this.scoreTimer >= GAME_SCORE_INTERVAL[this.level]) {
-            this.scoreUp(Math.floor(this.scoreTimer / GAME_SCORE_INTERVAL[this.level]));
-            this.scoreTimer = 0;
-        }
+        // this.scoreTimer += dt;
+        // if (this.scoreTimer >= GAME_SCORE_INTERVAL[this.level]) {
+        //     this.scoreUp(Math.floor(this.scoreTimer / GAME_SCORE_INTERVAL[this.level]));
+        //     this.scoreTimer = 0;
+        // }
     }
 
     get level() {

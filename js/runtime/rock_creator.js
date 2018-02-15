@@ -1,5 +1,6 @@
 import GameManager      from '../manager/game_manager'
 import PhysicsManager   from '../manager/physics_manager'
+import EventManager     from '../manager/event_manager'
 import Logger       from '../base/logger'
 import Node         from '../base/node'
 import Sprite       from '../base/sprite'
@@ -14,7 +15,7 @@ const ROCK_IMG_SRC  = 'images/environment/rock.png'
 const ROCK_WIDTH    = 40;
 const ROCK_HEIGHT   = 40;
 const ROCK_CREATE_INTERVAL  = [2, 1.75, 1.5, 1.25, 1.1, 1.0];
-const ROCK_MOVE_SPEED       = [150, 200, 250, 300, 350, 400];
+const ROCK_MOVE_SPEED       = 200;
 
 export default class RockCreator extends Node {
     rocks = [];
@@ -24,9 +25,15 @@ export default class RockCreator extends Node {
 
         this.createTimer = 0;
         this.creating = false;
+        this.moving = false;
     }
 
     onEnable() {
+        EventManager.instance.addEventListener("YouDied", this.onPlayerDied.bind(this));
+    }
+
+    onDisable() {
+        EventManager.instance.removeEventListener("YouDied", this.onPlayerDied.bind(this));
     }
 
     update(dt) {
@@ -35,15 +42,20 @@ export default class RockCreator extends Node {
     }
 
     start() {
-        // this.createTimer = 0;
-        // this.creating = true;
-        // this.curInterval = ROCK_CREATE_INTERVAL[GameManager.instance.level] * (Math.random() * 0.4 - 0.2); // +- 20%
+        this.createTimer = 0;
+        this.creating = true;
+        this.moving = true;
+        this.curInterval = ROCK_CREATE_INTERVAL[GameManager.instance.level] * (Math.random() * 0.4 - 0.2); // +- 20%
     }
 
     move(dt) {
+        if (!this.moving) {
+            return;
+        }
+
         for (var i = 0; i < this.rocks.length; i++) {
             let rock = this.rocks[i];
-            rock.position = new Vector2(rock.position.x - ROCK_MOVE_SPEED[GameManager.instance.level] * dt, rock.position.y);
+            rock.position = new Vector2(rock.position.x - ROCK_MOVE_SPEED * dt, rock.position.y);
             if (rock.position.x < -ROCK_WIDTH) {
                 PhysicsManager.instance.removeCollider("ROCK", rock);
                 this.rocks.splice(i--, 1);
@@ -77,5 +89,19 @@ export default class RockCreator extends Node {
             }
             PhysicsManager.instance.addCollider("ROCK", rock);
         }
+    }
+
+    pause() {
+        this.moving = false;
+        this.creating = false;
+    }
+
+    resume() {
+        this.moving = true;
+        this.creating = true;
+    }
+
+    onPlayerDied() {
+        this.pause();
     }
 }

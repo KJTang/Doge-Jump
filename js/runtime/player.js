@@ -2,12 +2,16 @@ import GameManager      from '../manager/game_manager'
 import EventManager     from '../manager/event_manager'
 import PhysicsManager   from '../manager/physics_manager'
 import SceneManager     from '../manager/scene_manager'
+import ActionManager    from '../manager/action_manager'
+import ActionCallFunc   from '../manager/action/action_callfunc'
+
 import Vector2          from '../base/vector'
 import Node             from '../base/node'
 import Sprite           from '../base/sprite'
 import Animation        from '../base/animation'
-import Logger           from '../base/logger'
 import Rect             from '../base/rect'
+import Logger           from '../base/logger'
+
 import String           from '../utility/utility_string'
 
 const PLAYER_IMG_SRC = 'images/character/doge_{0}.jpg'
@@ -36,14 +40,7 @@ export default class Player extends Node {
         this.jumpFrameCounter = 0;
         this.jumpIsUp = true;
 
-        // let frames = [];
-        // for (let i = 0; i != 6; ++i) {
-        //     frames.push(PLAYER_IMG_SRC.formatUnicorn(i.toString()));
-        // }
-        // this.initFrames(frames);
-        // this.play();
-
-
+        // animation
         let frames = [];
         for (let i = 0; i != 6; ++i) {
             frames.push(PLAYER_IMG_SRC.formatUnicorn(i.toString()));
@@ -56,20 +53,23 @@ export default class Player extends Node {
 
     onEnable() {
         super.onEnable();
-        // EventManager.instance.addEventListener("TouchStart", this.onTouchStart.bind(this));
+        EventManager.instance.addEventListener("YouDied", this.onPlayerDied.bind(this));
         PhysicsManager.instance.addCollider("PLAYER", this);
         PhysicsManager.instance.addRule("PLAYER", "ROCK");
     }
 
     onDisable() {
         super.onDisable();
-        // EventManager.instance.removeEventListener("TouchStart", this.onTouchStart.bind(this));
+        EventManager.instance.removeEventListener("YouDied", this.onPlayerDied.bind(this));
         PhysicsManager.instance.removeCollider("PLAYER", this);
         PhysicsManager.instance.removeRule("PLAYER", "ROCK");
     }
 
     update(dt) {
-        this.jumpUpdate(dt);
+        if (!this.dead) {
+            this.jumpUpdate(dt);
+        }
+
         super.update(dt);
     }
 
@@ -118,7 +118,11 @@ export default class Player extends Node {
     }
 
     onCollisionBegin(other) {
-        // Logger.print("Player: onCollisionBegin");
-        SceneManager.instance.quitGame = true;
+        EventManager.instance.dispatch("YouDied", null);
+    }
+
+    onPlayerDied() {
+        this.dead = true;
+        this.anim.pause();
     }
 }
