@@ -21,9 +21,9 @@ const PLAYER_JUMP_ACCE = - 2 * PLAYER_JUMP_HEIGHT / Math.pow(PLAYER_JUMP_TIME, 2
 // init velocity: v = a * t
 const PLAYER_JUMP_VEL = - PLAYER_JUMP_ACCE * PLAYER_JUMP_TIME;
 
-export default class Player extends Sprite {
+export default class Player extends Node {
     constructor(x = 0, y = 0) {
-        super('', PLAYER_WIDTH, PLAYER_HEIGHT);
+        super(PLAYER_WIDTH, PLAYER_HEIGHT);
 
         this.originX = x;
         this.originY = y;
@@ -48,10 +48,10 @@ export default class Player extends Sprite {
         for (let i = 0; i != 6; ++i) {
             frames.push(PLAYER_IMG_SRC.formatUnicorn(i.toString()));
         }
-        let anim = new Animation(frames[0], PLAYER_WIDTH, PLAYER_HEIGHT);
-        anim.initFrames(frames);
-        anim.play();
-        this.addChild(anim);
+        this.anim = new Animation(frames[1], PLAYER_WIDTH, PLAYER_HEIGHT);
+        this.anim.initFrames(frames);
+        this.anim.play();
+        this.addChild(this.anim);
     }
 
     onEnable() {
@@ -82,6 +82,9 @@ export default class Player extends Sprite {
 
         this.isJumping = true;
         this.curJumpTime = 0;
+
+        // when jumping, pause animation
+        this.anim.pause();
     }
 
     jumpUpdate(dt) {
@@ -93,6 +96,9 @@ export default class Player extends Sprite {
         if (this.curJumpTime >= PLAYER_JUMP_TIME * 2) {
             this.isJumping = false;
             this.position = new Vector2(this.originX, this.originY);
+
+            // when jump finished, resume animation
+            this.anim.resume();
             return;
         }
 

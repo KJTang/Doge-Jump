@@ -51,10 +51,6 @@ export default class Animation extends Sprite {
     }
 
     render(ctx) {
-        if (!this.isPlaying) {
-            super.render(ctx);
-        }
-
         if (this.imgList[this.frameIdx] != null) {
             // Logger.print(this.imgList[this.frameIdx]);
             Sprite.renderImg(ctx, this, this.imgList[this.frameIdx]);
@@ -74,5 +70,13 @@ export default class Animation extends Sprite {
     stop() {
         this.isPlaying = false;
         this.frameIdx = -1;
+    }
+
+    pause() {
+        this.isPlaying = false;
+    }
+
+    resume() {
+        this.isPlaying = true;
     }
 }
