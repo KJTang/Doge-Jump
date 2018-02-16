@@ -14,7 +14,7 @@ import Rect         from '../base/rect'
 const ROCK_IMG_SRC  = 'images/environment/rock.png'
 const ROCK_WIDTH    = 40;
 const ROCK_HEIGHT   = 40;
-const ROCK_CREATE_INTERVAL  = [2, 1.75, 1.5, 1.25, 1.1, 1.0];
+const ROCK_CREATE_INTERVAL  = 1.5;
 const ROCK_MOVE_SPEED       = 200;
 
 export default class RockCreator extends Node {
@@ -29,11 +29,17 @@ export default class RockCreator extends Node {
     }
 
     onEnable() {
-        EventManager.instance.addEventListener("YouDied", this.onPlayerDied.bind(this));
+        this.deadListener = this.onPlayerDied.bind(this);
+        EventManager.instance.addEventListener("YouDied", this.deadListener);
     }
 
     onDisable() {
-        EventManager.instance.removeEventListener("YouDied", this.onPlayerDied.bind(this));
+        // remove collision listener
+        this.rocks.forEach(function(rock) {
+            PhysicsManager.instance.removeCollider("ROCK", rock);
+        });
+        
+        EventManager.instance.removeEventListener("YouDied", this.deadListener);
     }
 
     update(dt) {
@@ -45,7 +51,7 @@ export default class RockCreator extends Node {
         this.createTimer = 0;
         this.creating = true;
         this.moving = true;
-        this.curInterval = ROCK_CREATE_INTERVAL[GameManager.instance.level] * (Math.random() * 0.4 - 0.2); // +- 20%
+        this.curInterval = ROCK_CREATE_INTERVAL * (Math.random() * 0.4 - 0.2); // +- 20%
     }
 
     move(dt) {
@@ -72,7 +78,7 @@ export default class RockCreator extends Node {
         this.createTimer += dt;
         if (this.createTimer >= this.curInterval) {
             this.createTimer = 0;
-            this.curInterval = ROCK_CREATE_INTERVAL[GameManager.instance.level] * (1 + Math.random() * 0.4 - 0.2); // +- 20%
+            this.curInterval = ROCK_CREATE_INTERVAL * (1 + Math.random() * 0.4 - 0.2); // +- 20%
 
             // Logger.print("create rock");
             let rock = new Sprite(ROCK_IMG_SRC, ROCK_WIDTH, ROCK_HEIGHT);

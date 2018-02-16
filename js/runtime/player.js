@@ -40,6 +40,8 @@ export default class Player extends Node {
         this.jumpFrameCounter = 0;
         this.jumpIsUp = true;
 
+        this.dead = false;
+
         // animation
         let frames = [];
         for (let i = 0; i != 6; ++i) {
@@ -53,14 +55,19 @@ export default class Player extends Node {
 
     onEnable() {
         super.onEnable();
-        EventManager.instance.addEventListener("YouDied", this.onPlayerDied.bind(this));
+        
+        // dead callback
+        this.deadListener = this.onPlayerDied.bind(this);
+        EventManager.instance.addEventListener("YouDied", this.deadListener);
+
+        // collision
         PhysicsManager.instance.addCollider("PLAYER", this);
         PhysicsManager.instance.addRule("PLAYER", "ROCK");
     }
 
     onDisable() {
         super.onDisable();
-        EventManager.instance.removeEventListener("YouDied", this.onPlayerDied.bind(this));
+        EventManager.instance.removeEventListener("YouDied", this.deadListener);
         PhysicsManager.instance.removeCollider("PLAYER", this);
         PhysicsManager.instance.removeRule("PLAYER", "ROCK");
     }

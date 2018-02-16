@@ -19,6 +19,7 @@ let gm = GameManager.instance;
 
 export default class PlayScene extends Scene {
     constructor() {
+        // Logger.print('PlayScene: constructor');
         super();
 
         // this.bg = new Background();
@@ -52,8 +53,9 @@ export default class PlayScene extends Scene {
         this.dialog = new Sprite('images/ui/BtnStartNormal.png', gm.designWidth * 0.8, gm.designHeight * 0.5);
         this.dialog.position = new Vector2(gm.designWidth / 2, gm.designHeight / 2);
         let dialogBtn = new Button('images/ui/BtnStartNormal.png', 'images/ui/BtnStartSelected.png', 128, 64, function(point) {
-            // SceneManager.instance.switchToScene('MainScene');
-            SceneManager.instance.quitGame = true;
+            // reload scene
+            SceneManager.instance.switchToScene('PlayScene');
+            // SceneManager.instance.quitGame = true;
         }.bind(this));
         dialogBtn.position = new Vector2(0, -64);
         this.dialog.addChild(dialogBtn);
@@ -75,11 +77,12 @@ export default class PlayScene extends Scene {
     }
 
     onEnable() {
-        EventManager.instance.addEventListener("YouDied", this.onPlayerDied.bind(this));
+        this.deadListener = this.onPlayerDied.bind(this);
+        EventManager.instance.addEventListener("YouDied", this.deadListener);
     }
 
     onDisable() {
-        EventManager.instance.removeEventListener("YouDied", this.onPlayerDied.bind(this));
+        EventManager.instance.removeEventListener("YouDied", this.deadListener);
     }
 
     onSwitchIn() {
