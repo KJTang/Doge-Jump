@@ -17,6 +17,7 @@ export default class Node {
     isIndexDirty = true;
 
     _enable = false;
+    enableBeforeParentDisable = true;   // if parent set disabled
     _visible = true;
     visibleBeforeDisable = true;
 
@@ -82,11 +83,25 @@ export default class Node {
 
                 this.onDisable();
             }
+
+            // set child
+            this.children.forEach(function(child) {
+                this.setChildEnable(child, value);
+            }.bind(this));
         }
     }
 
     get enable() {
         return this._enable;
+    }
+
+    setChildEnable(child, value) {
+        if (value) {
+            child.enable = child.enableBeforeParentDisable;
+        } else {
+            child.enableBeforeParentDisable = child.enable;
+            child.enable = value;
+        }
     }
 
     set visible(value) {
