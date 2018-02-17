@@ -28,18 +28,25 @@ export default class PhysicsManager extends Manager {
     update(dt) {
         super.update(dt);
 
-        for (var [key, value] of this.rules) {
-            let colliderListA = this.colliders.get(key.toString());
-            let colliderListB = this.colliders.get(value.toString());
-            if (!colliderListA || !colliderListB) {
-                continue;
-            }
-            for (var colliderA of colliderListA) {
-                for (var colliderB of colliderListB) {
-                    if (Rect.isOverlapRect(colliderA.getBoundingBox(), colliderB.getBoundingBox())) {
-                        this.handleCollisionBegin(colliderA, colliderB);
-                    } else {
-                        this.handleCollisionEnd(colliderA, colliderB);
+        for (var [key, valueList] of this.rules) {
+            for (var value of valueList) {
+                let colliderTagA = key.toString();
+                let colliderTagB = value.toString();
+                // Logger.print("=====", colliderTagA, colliderTagB, GameManager.instance.frameCnt);
+
+                let colliderListA = this.colliders.get(colliderTagA);
+                let colliderListB = this.colliders.get(colliderTagB);
+                if (!colliderListA || !colliderListB) {
+                    continue;
+                }
+                // Logger.print("========", colliderTagA, colliderTagB);
+                for (var colliderA of colliderListA) {
+                    for (var colliderB of colliderListB) {
+                        if (Rect.isOverlapRect(colliderA.getBoundingBox(), colliderB.getBoundingBox())) {
+                            this.handleCollisionBegin(colliderA, colliderB, colliderTagA, colliderTagB);
+                        } else {
+                            this.handleCollisionEnd(colliderA, colliderB, colliderTagA, colliderTagB);
+                        }
                     }
                 }
             }
@@ -49,9 +56,14 @@ export default class PhysicsManager extends Manager {
     addRule(typeA, typeB) {
         // Logger.print("addRule: " + typeA + " " + typeB);
         if (!this.rules.has(typeA)) {
-            this.rules.set(typeA, []);
+            this.rules.set(typeA, new Set());
         }
-        this.rules.get(typeA).push(typeB);
+        // already have
+        let ruleList = this.rules.get(typeA);
+        if (ruleList.has(typeB)) {
+            return;
+        }
+        ruleList.add(typeB);
     }
 
     removeRule(typeA, typeB) {
@@ -59,49 +71,46 @@ export default class PhysicsManager extends Manager {
             return;
         }
         let ruleList = this.rules.get(typeA);
-        for (let i = 0; i != ruleList.length; ++i) {
-            if (ruleList[i] == typeB) {
-                ruleList.splice(i, 1);
-                break;
-            }
-        }
+        ruleList.delete(typeB);
     }
 
     addCollider(type, collider) {
         if (!this.colliders.has(type)) {
-            this.colliders.set(type, []);
+            this.colliders.set(type, new Set());
         }
-        this.colliders.get(type).push(collider);
-        // Logger.print("addCollider: " + type + ", " + collider + ", " + this.colliders.get(type).length);
+        // already have
+        let colliderList = this.colliders.get(type);
+        if (colliderList.has(collider)) {
+            return;
+        }
+        colliderList.add(collider);
     }
 
     removeCollider(type, collider) {
+        // Logger.print("removeCollider");
         if (!this.colliders.has(type)) {
             return;
         }
         let colliderList = this.colliders.get(type);
-        for (let i = 0; i != colliderList.length; ++i) {
-            if (colliderList[i] == collider) {
-                colliderList.splice(i, 1);
-                break;
-            }
-        }
+        // Logger.print("1", colliderList);/
+        colliderList.delete(collider);
+        // Logger.print("2", colliderList);
     }
 
-    handleCollisionBegin(colliderA, colliderB) {
+    handleCollisionBegin(colliderA, colliderB, colliderTagA, colliderTagB) {
         if (this.collisions.has(colliderA) && this.collisions.get(colliderA).has(colliderB)) {
-            colliderA.onCollision(colliderB);
-            colliderB.onCollision(colliderA);
+            colliderA.onCollision(colliderB, colliderTagB);
+            colliderB.onCollision(colliderA, colliderTagA);
         } else {
             this.collisions.set(colliderA, new Set());
             this.collisions.get(colliderA).add(colliderB);
 
-            colliderA.onCollisionBegin(colliderB);
-            colliderB.onCollisionBegin(colliderA);
+            colliderA.onCollisionBegin(colliderB, colliderTagB);
+            colliderB.onCollisionBegin(colliderA, colliderTagA);
         }
     }
 
-    handleCollisionEnd(colliderA, colliderB) {
+    handleCollisionEnd(colliderA, colliderB, colliderTagA, colliderTagB) {
         if (this.collisions.has(colliderA) && this.collisions.get(colliderA).has(colliderB)) {
             let collision = this.collisions.get(colliderA);
             collision.delete(colliderB);
@@ -109,8 +118,8 @@ export default class PhysicsManager extends Manager {
                 this.collisions.delete(colliderA);
             }
 
-            colliderA.onCollisionEnd(colliderB);
-            colliderB.onCollisionEnd(colliderA);
+            colliderA.onCollisionEnd(colliderB, colliderTagB);
+            colliderB.onCollisionEnd(colliderA, colliderTagA);
         }
     }
 }

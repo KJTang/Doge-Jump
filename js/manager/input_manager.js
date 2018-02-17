@@ -26,16 +26,32 @@ export default class InputManager extends Manager {
         return this._instance;
     }
 
+    update(dt) {
+        super.update(dt);
+
+        if (this.needProcessDownEvt) {
+            this.needProcessDownEvt = false;
+            this.isTouching = true;
+            this.handleSelectDown();
+            // Logger.print("touch start: " + this.touchPos.toString());
+            EventManager.instance.dispatch("TouchStart", this.touchPos);
+        }
+        if (this.needProcessUpEvt) {
+            this.needProcessUpEvt = false;
+            this.isTouching = false;
+            this.handleSelectUp();
+            // Logger.print("touch end: " + this.touchPos.toString());
+            EventManager.instance.dispatch("TouchEnd", this.touchPos);
+        }
+    }
+
     onTouchStart(e) {
         e.preventDefault();
         this.curTouchX = e.touches[0].clientX;
         this.curTouchY = e.touches[0].clientY;
-        let pos = GameManager.instance.transPointCanvasToWorld(new Vector2(this.curTouchX, this.curTouchY));
-        this.isTouching = true;
+        this.touchPos = GameManager.instance.transPointCanvasToWorld(new Vector2(this.curTouchX, this.curTouchY));
 
-        this.handleSelectDown();
-        // Logger.print("touch start: " + pos.toString());
-        EventManager.instance.dispatch("TouchStart", pos);
+        this.needProcessDownEvt = true;
     }
 
     onTouchMove(e) {
@@ -46,12 +62,9 @@ export default class InputManager extends Manager {
 
     onTouchEnd(e) {
         e.preventDefault();
-        let pos = GameManager.instance.transPointCanvasToWorld(new Vector2(this.curTouchX, this.curTouchY));
-        this.isTouching = false;
+        this.touchPos = GameManager.instance.transPointCanvasToWorld(new Vector2(this.curTouchX, this.curTouchY));
 
-        this.handleSelectUp();
-        // Logger.print("touch end: " + pos.toString());
-        EventManager.instance.dispatch("TouchEnd", pos);
+        this.needProcessUpEvt = true;
     }
 
     onTouchCancel(e) {

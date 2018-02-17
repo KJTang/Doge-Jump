@@ -14,6 +14,7 @@ import Button           from '../base/button'
 import Player           from '../runtime/player'
 import Background       from '../runtime/background'
 import RockCreator      from '../runtime/rock_creator'
+import RedPocketCreator from '../runtime/redpocket_creator'
 
 let gm = GameManager.instance;
 
@@ -25,6 +26,7 @@ export default class PlayScene extends Scene {
         // this.bg = new Background();
         // this.addChild(this.bg);
 
+        // text
         this.levelTxt = new Text('level: 0', 100, "#000000", "bottom");
         this.addChild(this.levelTxt);
         this.levelTxt.pivot = new Vector2(0, 0);
@@ -35,10 +37,16 @@ export default class PlayScene extends Scene {
         this.scoreTxt.pivot = new Vector2(0, 0);
         this.scoreTxt.position = new Vector2(25, gm.designHeight * 0.90);
 
+        // environment
         this.rockCreator = new RockCreator();
         this.addChild(this.rockCreator);
         this.rockCreator.start();
 
+        // this.redpocketCreator = new RedPocketCreator();
+        // this.addChild(this.redpocketCreator);
+        // this.redpocketCreator.start();
+
+        // player
         this.player = new Player(gm.designWidth * 0.3, gm.designHeight * 0.4);
         this.addChild(this.player);
 
@@ -77,11 +85,17 @@ export default class PlayScene extends Scene {
     }
 
     onEnable() {
+        super.onEnable();
+        // Logger.print("PlayScene: onEnable");
+        
         this.deadListener = this.onPlayerDied.bind(this);
         EventManager.instance.addEventListener("YouDied", this.deadListener);
     }
 
     onDisable() {
+        super.onDisable();
+        // Logger.print("PlayScene: onDisable");
+
         EventManager.instance.removeEventListener("YouDied", this.deadListener);
     }
 

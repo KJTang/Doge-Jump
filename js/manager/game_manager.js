@@ -11,6 +11,7 @@ export default class GameManager extends Manager {
     _designStyle = 1;
     _scaleRate = 1;
     _scaleOffset = new Vector2(0, 0);
+    _frameCnt = 0;  // debug
 
     static get instance() {
         if (this._instance == null) {
@@ -27,6 +28,7 @@ export default class GameManager extends Manager {
         Logger.print("GameManager: scaleRate: " + this.scaleRate);
 
         // game data
+        this._frameCnt = 0;
         this._level = 0;
         this._score = 0;
 
@@ -35,6 +37,7 @@ export default class GameManager extends Manager {
     }
 
     update(dt) {
+        this._frameCnt += 1;
         // this.levelTimer += dt;
         // if (this.levelTimer >= GAME_LEVEL_INTERVAL[this.level]) {
         //     this.levelTimer = 0;
@@ -46,6 +49,10 @@ export default class GameManager extends Manager {
         //     this.scoreUp(Math.floor(this.scoreTimer / GAME_SCORE_INTERVAL[this.level]));
         //     this.scoreTimer = 0;
         // }
+    }
+
+    get frameCnt() {
+        return this._frameCnt;
     }
 
     get level() {

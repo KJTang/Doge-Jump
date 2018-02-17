@@ -148,8 +148,10 @@ export default class Main {
     update(dt) {
         // this.collisionDetection()
 
+        // update-order cannot be changed optionally
         GameManager.instance.update(dt);
         PhysicsManager.instance.update(dt);
+        InputManager.instance.update(dt);
         SceneManager.instance.update(dt);
         ActionManager.instance.update(dt);
     }

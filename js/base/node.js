@@ -193,15 +193,15 @@ export default class Node {
         return this.canvasRect; 
     }
 
-    onCollisionBegin(other) {
+    onCollisionBegin(other, tag) {
         // Logger.print("onCollisionBegin");
     }
 
-    onCollision(other) {
+    onCollision(other, tag) {
         // Logger.print("onCollision");
     }
 
-    onCollisionEnd(other) {
+    onCollisionEnd(other, tag) {
         // Logger.print("onCollisionEnd");
     }
 

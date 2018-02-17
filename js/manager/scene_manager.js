@@ -1,3 +1,4 @@
+import GameManager      from '../manager/game_manager'
 import Manager  from './manager'
 import Logger   from '../base/logger'
 import Node     from '../base/node'
@@ -38,12 +39,14 @@ export default class SceneManager extends Manager {
     }
 
     update(dt) {
+        // Logger.print("update: ", GameManager.instance.frameCnt);
         if (this.curScene) {
             this.curScene.update(dt);
         }
     }
 
     lateUpdate() {
+        // Logger.print("lateUpdate: ", GameManager.instance.frameCnt);
         if (this.nextScene) {
             this.realSwitchToScene();
         }
@@ -63,19 +66,30 @@ export default class SceneManager extends Manager {
     }
 
     switchToScene(name) {
-        let func = null;
-        let scene = null;
-        if (name != null && (func = this.sceneMap[name]) && (scene = func())) {
-            this.nextScene = scene;
+        // Logger.print("switchToScene: ", name, GameManager.instance.frameCnt);
+        if (name != null && this.sceneMap[name]) {
+            this.nextScene = name;
         }
     }
 
     // do this after all update
     realSwitchToScene() {
+        // Logger.print("realSwitchToScene: ", GameManager.instance.frameCnt);
+        // destory cur scene
         if (this.curScene != null) {
             this.curScene.onSwitchOut();
             Node.destory(this.curScene);
+            this.curScene = null;
         }
+
+        // create next scene
+        let func = null;
+        let scene = null;
+        if (this.nextScene != null && (func = this.sceneMap[this.nextScene]) && (scene = func())) {
+            this.nextScene = scene;
+        }
+
+        // switch scene
         this.curScene = this.nextScene;
         this.nextScene = null;
         this.curScene.onSwitchIn();
