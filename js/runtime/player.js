@@ -63,7 +63,7 @@ export default class Player extends Node {
         // collision
         PhysicsManager.instance.addCollider("PLAYER", this);
         PhysicsManager.instance.addRule("PLAYER", "ROCK");
-        // PhysicsManager.instance.addRule("PLAYER", "REDPOCKET");
+        PhysicsManager.instance.addRule("PLAYER", "REDPOCKET");
     }
 
     onDisable() {
@@ -71,7 +71,7 @@ export default class Player extends Node {
         EventManager.instance.removeEventListener("YouDied", this.deadListener);
         PhysicsManager.instance.removeCollider("PLAYER", this);
         PhysicsManager.instance.removeRule("PLAYER", "ROCK");
-        // PhysicsManager.instance.removeRule("PLAYER", "REDPOCKET");
+        PhysicsManager.instance.removeRule("PLAYER", "REDPOCKET");
     }
 
     update(dt) {
@@ -127,11 +127,13 @@ export default class Player extends Node {
     }
 
     onCollisionBegin(other, tag) {
-        Logger.print("onCollisionBegin: ", tag, GameManager.instance.frameCnt);
+        // Logger.print("onCollisionBegin: ", tag, GameManager.instance.frameCnt);
         if (tag == 'ROCK') {
             EventManager.instance.dispatch("YouDied", null);
+            GameManager.instance.scoreClear();
         } else if (tag == 'REDPOCKET') {
-            Logger.print("afdsafdsafdsa");
+            GameManager.instance.scoreUp(100);
+            EventManager.instance.dispatch("RedPocket", 100);
         }
     }
 

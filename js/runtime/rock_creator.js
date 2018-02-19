@@ -11,9 +11,9 @@ import Rect         from '../base/rect'
 //     return Math.floor(Math.random() * (end - start) + start)
 // }
 
-const ROCK_IMG_SRC  = 'images/environment/rock.png'
-const ROCK_WIDTH    = 40;
-const ROCK_HEIGHT   = 40;
+const ROCK_IMG_SRC  = 'images/environment/candle.png'
+const ROCK_WIDTH    = 60;
+const ROCK_HEIGHT   = 60;
 const ROCK_CREATE_INTERVAL  = 1.5;
 const ROCK_MOVE_SPEED       = 200;
 

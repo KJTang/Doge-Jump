@@ -10,8 +10,8 @@ import Rect         from '../base/rect'
 const REDPOCKET_IMG_SRC  = 'images/environment/redpocket.png'
 const REDPOCKET_WIDTH    = 40;
 const REDPOCKET_HEIGHT   = 40;
-const REDPOCKET_CREATE_INTERVAL  = 2.0;
-const REDPOCKET_MOVE_SPEED       = 200;
+const REDPOCKET_CREATE_INTERVAL  = 2.5;
+const REDPOCKET_MOVE_SPEED       = [200, 300, 400];
 
 export default class RedPocketCreator extends Node {
     pockets = [];
@@ -47,7 +47,7 @@ export default class RedPocketCreator extends Node {
         this.createTimer = 0;
         this.creating = true;
         this.moving = true;
-        this.curInterval = REDPOCKET_CREATE_INTERVAL * (Math.random() * 0.4 - 0.2); // +- 20%
+        this.curInterval = this.calculateInterval();
     }
 
     move(dt) {
@@ -57,7 +57,7 @@ export default class RedPocketCreator extends Node {
 
         for (var i = 0; i < this.pockets.length; i++) {
             let pocket = this.pockets[i];
-            pocket.position = new Vector2(pocket.position.x - REDPOCKET_MOVE_SPEED * dt, pocket.position.y);
+            pocket.position = new Vector2(pocket.position.x - this.calculateSpeed() * dt, pocket.position.y);
             if (pocket.position.x < -REDPOCKET_WIDTH) {
                 PhysicsManager.instance.removeCollider("REDPOCKET", pocket);
                 this.pockets.splice(i--, 1);
@@ -74,7 +74,7 @@ export default class RedPocketCreator extends Node {
         this.createTimer += dt;
         if (this.createTimer >= this.curInterval) {
             this.createTimer = 0;
-            this.curInterval = REDPOCKET_CREATE_INTERVAL * (1 + Math.random() * 0.4 - 0.2); // +- 20%
+            this.curInterval = this.calculateInterval();
 
             // Logger.print("create pocket");
             let pocket = new Sprite(REDPOCKET_IMG_SRC, REDPOCKET_WIDTH, REDPOCKET_HEIGHT);
@@ -89,6 +89,19 @@ export default class RedPocketCreator extends Node {
                 rect.height = this.canvasRect.height / 2;
                 return rect; 
             }
+            pocket.onCollisionBegin = function(self, other, tag) {
+                // Logger.print("onCollisionBegin: ", self == pocket, tag, GameManager.instance.frameCnt);
+                if (tag == 'PLAYER') {
+                    PhysicsManager.instance.removeCollider("REDPOCKET", pocket);
+                    for (let i = 0; i != this.pockets.length; ++i) {
+                        if (this.pockets[i] == pocket) {
+                            this.pockets.splice(i, 1);
+                            Node.destory(pocket);
+                            break;
+                        }
+                    }
+                }
+            }.bind(this, pocket);
             PhysicsManager.instance.addCollider("REDPOCKET", pocket);
         }
     }
@@ -101,6 +114,15 @@ export default class RedPocketCreator extends Node {
     resume() {
         this.moving = true;
         this.creating = true;
+    }
+
+    calculateInterval() {
+        return REDPOCKET_CREATE_INTERVAL * (Math.random() + 0.5); // +- 50%
+    }
+
+    calculateSpeed() {
+        // Logger.print("==", Math.random() * 1000 % REDPOCKET_MOVE_SPEED.length)
+        return REDPOCKET_MOVE_SPEED[0];
     }
 
     onPlayerDied() {

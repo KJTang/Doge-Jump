@@ -23,28 +23,23 @@ export default class PlayScene extends Scene {
         // Logger.print('PlayScene: constructor');
         super();
 
+        // text
+        this.scoreTxt = new Text('MONEY: 0', 100, "#000000", "bottom");
+        this.addChild(this.scoreTxt);
+        this.scoreTxt.pivot = new Vector2(0, 0);
+        this.scoreTxt.position = new Vector2(25, gm.designHeight * 0.95);
+
+        // environment
         // this.bg = new Background();
         // this.addChild(this.bg);
 
-        // text
-        this.levelTxt = new Text('level: 0', 100, "#000000", "bottom");
-        this.addChild(this.levelTxt);
-        this.levelTxt.pivot = new Vector2(0, 0);
-        this.levelTxt.position = new Vector2(25, gm.designHeight * 0.95);
-
-        this.scoreTxt = new Text('score: 0', 100, "#000000", "bottom");
-        this.addChild(this.scoreTxt);
-        this.scoreTxt.pivot = new Vector2(0, 0);
-        this.scoreTxt.position = new Vector2(25, gm.designHeight * 0.90);
-
-        // environment
         this.rockCreator = new RockCreator();
         this.addChild(this.rockCreator);
         this.rockCreator.start();
 
-        // this.redpocketCreator = new RedPocketCreator();
-        // this.addChild(this.redpocketCreator);
-        // this.redpocketCreator.start();
+        this.redpocketCreator = new RedPocketCreator();
+        this.addChild(this.redpocketCreator);
+        this.redpocketCreator.start();
 
         // player
         this.player = new Player(gm.designWidth * 0.3, gm.designHeight * 0.4);
@@ -58,29 +53,28 @@ export default class PlayScene extends Scene {
         this.addChild(this.jumpBtn);
 
         // dialog
-        this.dialog = new Sprite('images/ui/BtnStartNormal.png', gm.designWidth * 0.8, gm.designHeight * 0.5);
+        this.dialog = new Sprite('images/ui/BtnNormal.png', gm.designWidth * 0.8, gm.designHeight * 0.5);
+        this.addChild(this.dialog);
         this.dialog.position = new Vector2(gm.designWidth / 2, gm.designHeight / 2);
-        let dialogBtn = new Button('images/ui/BtnStartNormal.png', 'images/ui/BtnStartSelected.png', 128, 64, function(point) {
+        
+        let dialogBtn = new Button('images/ui/BtnNormal.png', 'images/ui/BtnSelected.png', 128, 64, function(point) {
             // reload scene
             SceneManager.instance.switchToScene('PlayScene');
             // SceneManager.instance.quitGame = true;
         }.bind(this));
-        dialogBtn.position = new Vector2(0, -64);
         this.dialog.addChild(dialogBtn);
-        this.addChild(this.dialog);
+        dialogBtn.position = new Vector2(0, -64);
+
+        let dialogBtnName = new Text('RESTART', 100, "#000000", "middle");
+        dialogBtn.addChild(dialogBtnName);
+        dialogBtnName.position = new Vector2(0, 0);
+
+        let dialogTitle = new Text('YOU\'VE GOT:', 120, "#000000", "bottom");
+        this.dialog.addChild(dialogTitle);
+        dialogTitle.position = new Vector2(0, 90);
     }
 
     update(dt) {
-        if (this.lastLevel != gm.level) {
-            this.lastLevel = gm.level;
-            this.levelTxt.str = 'level: ' + gm.level.toString();
-        }
-
-        if (this.lastScore != gm.score) {
-            this.lastScore = gm.score;
-            this.scoreTxt.str = 'score: ' + gm.score.toString();
-        }
-
         super.update(dt);
     }
 
@@ -89,7 +83,10 @@ export default class PlayScene extends Scene {
         // Logger.print("PlayScene: onEnable");
         
         this.deadListener = this.onPlayerDied.bind(this);
+        this.scoreListener = this.onGetPocket.bind(this);
+
         EventManager.instance.addEventListener("YouDied", this.deadListener);
+        EventManager.instance.addEventListener("RedPocket", this.scoreListener);
     }
 
     onDisable() {
@@ -97,6 +94,7 @@ export default class PlayScene extends Scene {
         // Logger.print("PlayScene: onDisable");
 
         EventManager.instance.removeEventListener("YouDied", this.deadListener);
+        EventManager.instance.removeEventListener("RedPocket", this.scoreListener);
     }
 
     onSwitchIn() {
@@ -107,5 +105,14 @@ export default class PlayScene extends Scene {
     onPlayerDied() {
         this.jumpBtn.enable = false;
         this.dialog.enable = true;
+
+        let dialogContent = new Text(gm.score.toString(), gm.score.toString().length * 20, "#000000", "alphabetic", 40);
+        this.dialog.addChild(dialogContent);
+        dialogContent.pivot = new Vector2(0.5, 0.5);
+        dialogContent.position = new Vector2(0, 40);
+    }
+
+    onGetPocket(data) {
+        this.scoreTxt.str = 'MONEY: ' + gm.score.toString();
     }
 }

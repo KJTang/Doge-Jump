@@ -57,12 +57,16 @@ export default class MainScene extends Scene {
         // anim.position = new Vector2(GameManager.instance.designWidth / 2, GameManager.instance.designHeight * 0.3);
         // anim.play();
 
-        let startBtn = new Button('images/ui/BtnStartNormal.png', 'images/ui/BtnStartSelected.png', 128, 64, function(point) {
+        let startBtn = new Button('images/ui/BtnNormal.png', 'images/ui/BtnSelected.png', 128, 64, function(point) {
             SceneManager.instance.switchToScene("PlayScene");
         });
+        this.addChild(startBtn);
         startBtn.position = new Vector2(100, 100);
         startBtn.position = new Vector2(gm.designWidth / 2, gm.designHeight / 2);
-        this.addChild(startBtn);
+
+        let startBtnName = new Text('START', 100, "#000000", "middle");
+        startBtn.addChild(startBtnName);
+        startBtnName.position = new Vector2(0, 0);
     }
 
     onSwitchIn() {

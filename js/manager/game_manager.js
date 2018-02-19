@@ -73,6 +73,10 @@ export default class GameManager extends Manager {
         this._score += up;
     }
 
+    scoreClear() {
+        this._score = 0;
+    }
+
     get screenWidth() {
         return window.innerWidth;
     }

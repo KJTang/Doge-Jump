@@ -4,7 +4,7 @@ import Vector2          from './vector'
 import Logger           from './logger'
 
 export default class Text extends Node {
-    constructor(textStr = '', width = 0, style = "#ffffff", baseline = "middle", fontSize = 20, font = "Arial", stroke = false) {
+    constructor(textStr = '', width = 0, style = "#ffffff", baseline = "alphabetic", fontSize = 20, font = "Arial", stroke = false) {
         super(width, 0);
 
         this.str = textStr;
