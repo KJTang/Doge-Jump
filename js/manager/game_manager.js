@@ -2,10 +2,6 @@ import Manager  from './manager'
 import Vector2  from '../base/vector'
 import Logger   from '../base/logger'
 
-const GAME_LEVEL_INTERVAL = [5, 5, 5, 5, 5];
-const GAME_SCORE_INTERVAL = [0.5, 0.5, 0.4, 0.3, 0.2, 0.1];
-const GAME_MAX_LEVEL = 5;
-
 export default class GameManager extends Manager {
     _designResolution = new Vector2(window.innerWidth, window.innerHeight);
     _designStyle = 1;
@@ -29,40 +25,15 @@ export default class GameManager extends Manager {
 
         // game data
         this._frameCnt = 0;
-        this._level = 0;
         this._score = 0;
-
-        this.levelTimer = 0;
-        this.scoreTimer = 0;
     }
 
     update(dt) {
         this._frameCnt += 1;
-        // this.levelTimer += dt;
-        // if (this.levelTimer >= GAME_LEVEL_INTERVAL[this.level]) {
-        //     this.levelTimer = 0;
-        //     this.levelUp();
-        // }
-
-        // this.scoreTimer += dt;
-        // if (this.scoreTimer >= GAME_SCORE_INTERVAL[this.level]) {
-        //     this.scoreUp(Math.floor(this.scoreTimer / GAME_SCORE_INTERVAL[this.level]));
-        //     this.scoreTimer = 0;
-        // }
     }
 
     get frameCnt() {
         return this._frameCnt;
-    }
-
-    get level() {
-        return this._level;
-    }
-
-    levelUp(up = 1) {
-        if (this._level != GAME_MAX_LEVEL) {
-            this._level += up;
-        }
     }
 
     get score() {
